@@ -1,0 +1,22 @@
+#TODO: Refactor all options and place in a single list
+
+creatorURI <- c('http://csarven.ca/#i')
+
+licenseURI <- c('http://creativecommons.org/publicdomain/zero/1.0/')
+
+siteURI <- c('http://example.org/')
+
+models <- c("y ~ x", "y ~ log(x)", "y ~ poly(x, 2, raw=TRUE)", "y ~ poly(x, 3, raw=TRUE)")
+
+correlationMethod <- c('kendall')
+
+namespaces <- list(
+    worldbank="http://worldbank.270a.info/dataset/", transparency="http://transparency.270a.info/dataset/", oecd="http://oecd.270a.info/dataset/", bfs="http://bfs.270a.info/dataset/", fao="http://fao.270a.info/dataset/", ecb="http://ecb.270a.info/dataset/",
+    day="http://reference.data.gov.uk/id/day/", quarter="http://reference.data.gov.uk/id/quarter/", year="http://reference.data.gov.uk/id/year/"
+)
+
+sparqlEndpoints <- list(worldbank="http://worldbank.270a.info/sparql", transparency="http://transparency.270a.info/sparql", oecd="http://oecd.270a.info/sparql", bfs="http://bfs.270a.info/sparql", fao="http://fao.270a.info/sparql", ecb="http://ecb.270a.info/sparql")
+
+sparqlServiceUpdateURI <- c('http://localhost:3030/dataset/update')
+sparqlServiceQueryURI <- c('http://localhost:3030/dataset/query')
+
