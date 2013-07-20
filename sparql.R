@@ -14,7 +14,7 @@ PREFIX provenance: <", siteURI, "provenance/>
 ")
 
 sparqlUpdate <- function(analysisURI, datasetX, datasetY, refPeriod, data, analysis) {
-    sparqlQueryStringEncoded <- URLencode(sparqlQueryString(datasetX, datasetY, refPeriod))
+    sparqlQueryStringEncoded <- URLencode(sparqlQueryString(datasetX, datasetY, refPeriod), reserved=TRUE)
 
 
 #FIXME: xsd:decimal assignment is problematic because not all values are xsd:decimal!
@@ -192,7 +192,7 @@ WHERE {
             }
 
             ?refAreaX skos:notation ?refAreaCodeX .
-            FILTER (!regex(?refAreaCodeX, \"^[0-9]\"))
+            FILTER (!REGEX(?refAreaCodeX, \"^[0-9]\"))
 #            FILTER (DATATYPE(?x) = xsd:decimal || DATATYPE(?x) = xsd:double)
         }
     }
@@ -215,7 +215,7 @@ WHERE {
             }
 
             ?refAreaY skos:notation ?refAreaCodeY .
-            FILTER (!regex(?refAreaCodeY, \"^[0-9]\"))
+            FILTER (!REGEX(?refAreaCodeY, \"^[0-9]\"))
 #            FILTER (DATATYPE(?y) = xsd:decimal || DATATYPE(?y) = xsd:double)
         }
     }
