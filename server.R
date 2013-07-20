@@ -42,10 +42,11 @@ shinyServer(function(input, output, session) {
 
         analysisURI <- paste0(session$clientData$url_protocol, "//", session$clientData$url_hostname, strsplit(c(s = session$clientData$url_pathname), ".html"))
 
-        data <- sQCA(analysisURI)
+#        data <- sQCA(analysisURI)
+        data <- sQGA(analysisURI)
         if (length(data) > 0) {
             #Exists in store
-            data <- sQGA(analysisURI)
+#            data <- sQGA(analysisURI)
 
             analysis <- getAnalysis(datasetX, datasetY, refPeriod, data)
 
@@ -250,12 +251,5 @@ shinyServer(function(input, output, session) {
                 cat(format(o))
             }
         }
-
-#TODO: Download CSV, RDF?
-
-#    for (m in models) {
-#        print(summary(lm(formula = as.formula(m))))
-#    }
-#    summary(data)
     })
 })
