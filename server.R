@@ -138,7 +138,7 @@ shinyServer(function(input, output, session) {
 
                 plotPath <- paste0("plots/", analysis$id, ".svg")
 
-                if (!file.exists(plotPath)) {
+                if (!file.exists(paste0("www/", plotPath))) {
                     data <- analysis$data
                     x <- data$x
                     y <- data$y
