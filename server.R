@@ -206,7 +206,7 @@ shinyServer(function(input, output, session) {
                 csvPath <- paste0("/csv/", analysis$id, ".csv")
 
                 o <- HTML(paste0("
-                    <img src=\"", url_protocol, "//", url_hostname, "/", plotPath, "\" width=\"100%\" height=\"100%\"/>
+                    <img src=\"", url_protocol, "//", url_hostname, "/", plotPath, "\" width=\"100%\"/>
 
                     <p id=\"download-csv\"><a href=\"", csvPath , "\">CSV</a></p>
                 "))

@@ -17,7 +17,7 @@ $(document).ready(function(){
         $("#datasetY").val(datasetY);
         $("#refPeriod").val(refPeriod);
 
-        $("#plot").css("background", "url(/theme/default/images/icons/icon_loading.gif) no-repeat 50% 30%");
+        $(".entry-content").css("background", "url(/theme/default/images/icons/icon_loading.gif) no-repeat 65% 20%");
     }
 
     $("#submit").click(function() {
