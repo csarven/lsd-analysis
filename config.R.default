@@ -15,7 +15,7 @@ namespaces <- list(
     day="http://reference.data.gov.uk/id/day/", quarter="http://reference.data.gov.uk/id/quarter/", year="http://reference.data.gov.uk/id/year/"
 )
 
-sparqlEndpoints <- list(worldbank="http://worldbank.270a.info/sparql", transparency="http://transparency.270a.info/sparql", oecd="http://oecd.270a.info/sparql", bfs="http://bfs.270a.info/sparql", fao="http://fao.270a.info/sparql", ecb="http://ecb.270a.info/sparql")
+sparqlEndpoints <- list(stats="http://stats.270a.info/sparql", worldbank="http://worldbank.270a.info/sparql", transparency="http://transparency.270a.info/sparql", oecd="http://oecd.270a.info/sparql", bfs="http://bfs.270a.info/sparql", fao="http://fao.270a.info/sparql", ecb="http://ecb.270a.info/sparql")
 
 sparqlServiceUpdateURI <- c('http://localhost:3030/dataset/update')
 sparqlServiceQueryURI <- c('http://localhost:3030/dataset/query')

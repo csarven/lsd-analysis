@@ -51,7 +51,7 @@ sparqlUpdate <- function(analysisURI, datasetX, datasetY, refPeriod, data, analy
 
     plotURI <- paste0(siteURI, "plots/", digest(paste0(datasetX, datasetY, refPeriod), algo="sha1", serialize=FALSE), ".svg")
 
-    sparqlQueryURI <- paste0("<http://stats.270a.info/sparql?query=", sparqlQueryStringEncoded, ">")
+    sparqlQueryURI <- paste0(sparqlEndpoints[stats], "?query=", sparqlQueryStringEncoded, ">")
 
     query <- paste0("
 INSERT DATA {
@@ -148,7 +148,7 @@ WHERE {
 
 sparqlQuery <- function(datasetX, datasetY, refPeriod) {
     q <- sparqlQueryString(datasetX, datasetY, refPeriod)
-    r <- SPARQL("http://stats.270a.info/sparql", q)
+    r <- SPARQL(paste0(sparqlEndpoints[stats]), q)
     return(r$results)
 }
 
