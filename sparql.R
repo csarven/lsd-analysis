@@ -39,8 +39,8 @@ sparqlUpdate <- function(analysisURI, datasetX, datasetY, refPeriod, data, analy
                 a stats:Summary ;
                 stats:linearModel \"", analysis$modelsData[i, 'linearModel'], "\" ;
                 stats:adjustedRSquared \"", analysis$modelsData[i, 'adjustedRSquared'], "\"^^xsd:double ;
-                stats:yIntercept \"", analysis$modelsData[i, 'yIntercept'], "\"^^xsd:decimal ;
-                stats:slope \"", analysis$modelsData[i, 'slope'], "\"^^xsd:decimal
+                stats:yIntercept \"", analysis$modelsData[i, 'yIntercept'], "\"^^xsd:double ;
+                stats:slope \"", analysis$modelsData[i, 'slope'], "\"^^xsd:ouble
             ] ;"
 #                stats:lineOfBestFit \"y=5048.421+(15304.1273*x)\" ;
         )
