@@ -25,7 +25,10 @@ $(document).ready(function(){
         var datasetY = $('#datasetY').val().match(/http:\/\/([^.]*).270a.info\/dataset\/(.*)/);
         var refPeriod = $('#refPeriod').val().match(/http:\/\/reference.data.gov.uk\/id\/([^\/]*)\/(.*)/);
 
-        window.location.href = window.location.protocol + "//" + window.location.hostname + "/analysis/" + 
+        port = '';
+        if (window.location.port.length > 0) { port = ":" + window.location.port }
+
+        window.location.href = window.location.protocol + "//" + window.location.hostname + port + "/analysis/" +
             datasetX[1] + ":" + datasetX[2] + "/" +
             datasetY[1] + ":" + datasetY[2] + "/" +
             refPeriod[1] + ":" + refPeriod[2];
