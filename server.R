@@ -160,15 +160,14 @@ shinyServer(function(input, output, session) {
                         Group <- data$identityX
                     }
 
+                    g <- ggplot(data, environment = environment(), aes(x=data$x, y=data$y)) + geom_point(size=2, shape=1) + labs(list(x=xLabel, y=yLabel, title=paste0(refPeriod, " correlation")))
+
                     if (length(unique(Group)) > 1) {
                         plot_labeller <- function(variable, value){
                             return(resourceLabels[gsub("<|>", '', as.character(value))])
                         }
 
-                        g <- ggplot(data, environment = environment(), aes(x=data$x, y=data$y, aes(colour = Group))) + geom_point(size=2, shape=1) + labs(list(x=xLabel, y=yLabel, title=paste0(refPeriod, " correlation"))) + facet_grid(identityY ~ identityX, labeller=plot_labeller) + theme(legend.position="none")
-                    }
-                    else {
-                        g <- ggplot(data, environment = environment(), aes(x=data$x, y=data$y)) + geom_point(size=2, shape=1) + labs(list(x=xLabel, y=yLabel, title=paste0(refPeriod, " correlation")))                    
+                        g <- g + facet_grid(identityY ~ identityX, labeller=plot_labeller) + theme(legend.position="none")
                     }
 
             #TODO: Refactor
