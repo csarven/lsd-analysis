@@ -40,7 +40,7 @@ sparqlUpdate <- function(analysisURI, datasetX, datasetY, refPeriod, data, analy
                 stats:linearModel \"", analysis$modelsData[i, 'linearModel'], "\" ;
                 stats:adjustedRSquared \"", analysis$modelsData[i, 'adjustedRSquared'], "\"^^xsd:double ;
                 stats:yIntercept \"", analysis$modelsData[i, 'yIntercept'], "\"^^xsd:double ;
-                stats:slope \"", analysis$modelsData[i, 'slope'], "\"^^xsd:ouble
+                stats:slope \"", analysis$modelsData[i, 'slope'], "\"^^xsd:double
             ] ;"
 #                stats:lineOfBestFit \"y=5048.421+(15304.1273*x)\" ;
         )
