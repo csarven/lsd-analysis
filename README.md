@@ -1,6 +1,6 @@
 # Linked Statistical Data Analysis
 
-A path to using federated queries, statistical analysis and reuse of statistical data.
+A path to using federated queries, statistical analysis and reuse of statistical linked data.
 
 All feedback welcome.
 
