@@ -94,7 +94,7 @@ shinyServer(function(input, output, session) {
         x <- data$x
         y <- data$y
 
-        write.csv(data, file=paste0("www/csv/", id, ".csv"), qmethod="escape")
+        write.csv(data, file=paste0("www/csv/", id, ".csv"))
 
         correlation <- cor(x, y, use="complete.obs", method=correlationMethod)
         pValue <- cor.test(x, y, method=correlationMethod)$p.value
