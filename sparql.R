@@ -122,7 +122,35 @@ sparqlQueryCheckAnalysis <- function(analysisURI) {
 }
 
 
-sparqlQueryGetAnalysis <- function(analysisURI) {
+sparqlQueryGetAnalysisSummary <- function(analysisURI) {
+    q <- paste0("
+PREFIX stats: <http://stats.270a.info/vocab#>
+
+SELECT *
+WHERE {
+    GRAPH <http://stats.270a.info/graph/analysis> {
+        <", analysisURI, ">
+            stats:independentVariable ?datasetX ;
+            stats:dependentVariable ?datasetY ;
+            stats:refPeriod ?refPeriod ;
+            stats:graph ?graph ;
+            stats:n ?n ;
+            stats:pValue ?pValue ;
+            stats:correlation ?correlation ;
+            stats:correlationMethod ?correlationMethod ;
+            stats:maxAdjustedRSquared ?maxAdjustedRSquared ;
+            stats:bestModel ?bestModel
+    }
+}
+");
+
+    r <- SPARQL(sparqlServiceQueryURI, q)
+    return(r$results)
+}
+
+
+
+sparqlQueryGetAnalysisData <- function(analysisURI) {
     q <- paste0("
 PREFIX stats: <http://stats.270a.info/vocab#>
 

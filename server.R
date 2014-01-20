@@ -12,7 +12,8 @@ sQS <- memoise(sparqlQueryString)
 sQ <- memoise(sparqlQuery)
 sQCA <- memoise(sparqlQueryCheckAnalysis)
 sU <- memoise(sparqlUpdate)
-sQGA <- memoise(sparqlQueryGetAnalysis)
+sQGAD <- memoise(sparqlQueryGetAnalysisData)
+sQGAS <- memoise(sparqlQueryGetAnalysisSummary)
 
 
 shinyServer(function(input, output, session) {
@@ -42,13 +43,18 @@ shinyServer(function(input, output, session) {
 
         analysisURI <- paste0(session$clientData$url_protocol, "//", session$clientData$url_hostname, strsplit(c(s = session$clientData$url_pathname), ".html"))
 
-#        data <- sQCA(analysisURI)
-        data <- sQGA(analysisURI)
+        data <- sQGAD(analysisURI)
         if (length(data) > 0) {
             #Exists in store
-#            data <- sQGA(analysisURI)
 
-            analysis <- getAnalysis(datasetX, datasetY, refPeriod, data)
+#            analysis <- getAnalysis(datasetX, datasetY, refPeriod, data)
+
+            analysisSummary <- sQGAS(analysisURI)
+            id <- digest(paste0(datasetX, datasetY, refPeriod), algo="sha1", serialize=FALSE)
+
+            meta <- data.frame("correlation"=analysisSummary$correlation, "pValue"=analysisSummary$pValue, "maxAdjustedRSquared"=analysisSummary$maxAdjustedRSquared, "bestModel"=analysisSummary$bestModel, "correlationMethod"=analysisSummary$correlationMethod, "graph"=analysisSummary$graph)
+
+            analysis <- list("datasetX"=datasetX, "datasetY"=datasetY, "refPeriod"=refPeriod, "data"=data, "meta"=meta, "id"=id)
 
 #print(session$sendCustomMessage)
 #isolate({
@@ -132,84 +138,93 @@ shinyServer(function(input, output, session) {
             analysis <- getData()
 
             if (is.null(analysis[["warning"]])) {
-                url_protocol <- session$clientData$url_protocol
-                url_hostname <- session$clientData$url_hostname
-                url_pathname <- session$clientData$url_pathname
+                csvPath <- paste0("/csv/", analysis$id, ".csv")
 
-                plotPath <- paste0("plots/", analysis$id, ".svg")
+                if (is.null(analysis$meta$graph)) {
+                    url_protocol <- session$clientData$url_protocol
+                    url_hostname <- session$clientData$url_hostname
+                    url_pathname <- session$clientData$url_pathname
 
-                if (!file.exists(paste0("www/", plotPath))) {
-                    data <- analysis$data
-                    x <- data$x
-                    y <- data$y
-                    xLabel <- resourceLabels[analysis$datasetX]
-                    yLabel <- resourceLabels[analysis$datasetY]
+                    plotPath <- paste0("plots/", analysis$id, ".svg")
 
-                    refPeriod <- resourceLabels[analysis$refPeriod]
-                    correlation <- analysis$meta$correlation
-                    pValue <- analysis$meta$pValue
-                    bestModel <- analysis$meta$bestModel
+                    if (!file.exists(paste0("www/", plotPath))) {
+                        data <- analysis$data
+                        x <- data$x
+                        y <- data$y
+                        xLabel <- resourceLabels[analysis$datasetX]
+                        yLabel <- resourceLabels[analysis$datasetY]
 
-                    identityXCount <- length(unique(data$identityX))
-                    identityYCount <- length(unique(data$identityY))
-                    Group <- ''
-                    if (identityYCount >= identityXCount) {
-                        Group <- data$identityY
-                    }
-                    else {
-                        Group <- data$identityX
-                    }
+                        refPeriod <- resourceLabels[analysis$refPeriod]
+                        correlation <- analysis$meta$correlation
+                        pValue <- analysis$meta$pValue
+                        bestModel <- analysis$meta$bestModel
 
-                    g <- ggplot(data, environment = environment(), aes(x=data$x, y=data$y)) + geom_point(size=2, shape=1) + labs(list(x=xLabel, y=yLabel, title=paste0(refPeriod, " correlation")))
-
-                    if (length(unique(Group)) > 1) {
-                        plot_labeller <- function(variable, value){
-                            return(resourceLabels[gsub("<|>", '', as.character(value))])
-                        }
-
-                        g <- g + facet_grid(identityY ~ identityX, labeller=plot_labeller) + theme(legend.position="none")
-                    }
-
-            #TODO: Refactor
-#                    statsmooth <- ''
-                    if (bestModel == "y ~ x") {
-                        g <- g + stat_smooth(method=lm, formula = y ~ x, na.rm=TRUE)
-                    }
-                    else {
-                        if (bestModel == "y ~ log(x)") {
-                            g <- g + stat_smooth(method=lm, formula = y ~ log(x), na.rm=TRUE)
+                        identityXCount <- length(unique(data$identityX))
+                        identityYCount <- length(unique(data$identityY))
+                        Group <- ''
+                        if (identityYCount >= identityXCount) {
+                            Group <- data$identityY
                         }
                         else {
-                            if (bestModel == "y ~ poly(x, 2, raw=TRUE)") {
-                                g <- g + stat_smooth(method=lm, formula = y ~ poly(x, 2, raw=TRUE), na.rm=TRUE)
+                            Group <- data$identityX
+                        }
+
+                        g <- ggplot(data, environment = environment(), aes(x=data$x, y=data$y)) + geom_point(size=2, shape=1) + labs(list(x=xLabel, y=yLabel, title=paste0(refPeriod, " correlation")))
+
+                        if (length(unique(Group)) > 1) {
+                            plot_labeller <- function(variable, value){
+                                return(resourceLabels[gsub("<|>", '', as.character(value))])
+                            }
+
+                            g <- g + facet_grid(identityY ~ identityX, labeller=plot_labeller) + theme(legend.position="none")
+                        }
+
+                #TODO: Refactor
+    #                    statsmooth <- ''
+                        if (bestModel == "y ~ x") {
+                            g <- g + stat_smooth(method=lm, formula = y ~ x, na.rm=TRUE)
+                        }
+                        else {
+                            if (bestModel == "y ~ log(x)") {
+                                g <- g + stat_smooth(method=lm, formula = y ~ log(x), na.rm=TRUE)
                             }
                             else {
-                                if (bestModel == "y ~ poly(x, 3, raw=TRUE)") {
-                                   g <- g + stat_smooth(method=lm, formula = y ~ poly(x, 3, raw=TRUE), na.rm=TRUE)
+                                if (bestModel == "y ~ poly(x, 2, raw=TRUE)") {
+                                    g <- g + stat_smooth(method=lm, formula = y ~ poly(x, 2, raw=TRUE), na.rm=TRUE)
+                                }
+                                else {
+                                    if (bestModel == "y ~ poly(x, 3, raw=TRUE)") {
+                                       g <- g + stat_smooth(method=lm, formula = y ~ poly(x, 3, raw=TRUE), na.rm=TRUE)
+                                    }
                                 }
                             }
                         }
+
+    #                    g <- g + stat_smooth()
+
+                        g <- g + annotate("text", x=Inf, y=Inf, label="270a.info", hjust=1.3, vjust=2, color="#0000E4", size=4)
+
+    #                    width <- 7 * length(unique(Group))
+
+                        ggsave(plot=g, file=paste0("www/", plotPath), width=7, height=7)
                     }
 
-#                    g <- g + stat_smooth()
+    #                sparqlQueryStringEncoded <- URLencode(sparqlQueryString(analysis$datasetX, analysis$datasetY, analysis$refPeriod))
+    #                sparqlQueryURI <- paste0("http://stats.270a.info/sparql?query=", sparqlQueryStringEncoded)
 
-                    g <- g + annotate("text", x=Inf, y=Inf, label="270a.info", hjust=1.3, vjust=2, color="#0000E4", size=4)
+                    o <- HTML(paste0("
+                        <img src=\"", url_protocol, "//", url_hostname, "/", plotPath, "\" width=\"100%\"/>
 
-#                    width <- 7 * length(unique(Group))
-
-                    ggsave(plot=g, file=paste0("www/", plotPath), width=7, height=7)
+                        <p id=\"download-csv\"><a href=\"", csvPath , "\">CSV</a></p>
+                    "))
                 }
+                else {
+                    o <- HTML(paste0("
+                        <img src=\"", gsub("<|>", '', as.character(analysis$meta$graph)), "\" width=\"100%\"/>
 
-#                sparqlQueryStringEncoded <- URLencode(sparqlQueryString(analysis$datasetX, analysis$datasetY, analysis$refPeriod))
-#                sparqlQueryURI <- paste0("http://stats.270a.info/sparql?query=", sparqlQueryStringEncoded)
-
-                csvPath <- paste0("/csv/", analysis$id, ".csv")
-
-                o <- HTML(paste0("
-                    <img src=\"", url_protocol, "//", url_hostname, "/", plotPath, "\" width=\"100%\"/>
-
-                    <p id=\"download-csv\"><a href=\"", csvPath , "\">CSV</a></p>
-                "))
+                        <p id=\"download-csv\"><a href=\"", csvPath , "\">CSV</a></p>
+                    "))
+                }
 
                 cat(format(o))
             }
