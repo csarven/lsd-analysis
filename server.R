@@ -43,14 +43,16 @@ shinyServer(function(input, output, session) {
 
         analysisURI <- paste0(session$clientData$url_protocol, "//", session$clientData$url_hostname, strsplit(c(s = session$clientData$url_pathname), ".html"))
 
-        data <- sQGAD(analysisURI)
-        if (length(data) > 0) {
+        analysisSummary <- sQGAS(analysisURI)
+        if (length(analysisSummary) > 0) {
             #Exists in store
 
 #            analysis <- getAnalysis(datasetX, datasetY, refPeriod, data)
+#            data <- sQGAD(analysisURI)
 
-            analysisSummary <- sQGAS(analysisURI)
             id <- digest(paste0(datasetX, datasetY, refPeriod), algo="sha1", serialize=FALSE)
+
+            data <- read.csv(paste0("www/csv/", id, ".csv"), header=T)
 
             meta <- data.frame("correlation"=analysisSummary$correlation, "pValue"=analysisSummary$pValue, "maxAdjustedRSquared"=analysisSummary$maxAdjustedRSquared, "bestModel"=analysisSummary$bestModel, "correlationMethod"=analysisSummary$correlationMethod, "graph"=analysisSummary$graph)
 
