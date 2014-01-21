@@ -8285,6 +8285,12 @@ resourceLabels <- list(
 "http://oecd.270a.info/dataset/U_D_D"="Union members and employees",
 "http://oecd.270a.info/dataset/WATER_TREAT"="Wastewater treatment (% population connected)",
 
+"http://imf.270a.info/dataset/DM"="Data Mapper",
+"http://imf.270a.info/dataset/MBLD"="M Bilateral Data",
+"http://imf.270a.info/dataset/MCORE"="M Core Data",
+"http://imf.270a.info/dataset/PGI"="Principal Global Indicators",
+
+
 "http://transparency.270a.info/dataset/CPI2009"="Corruption Perceptions Index 2009",
 "http://transparency.270a.info/dataset/CPI2010"="Corruption Perceptions Index 2010",
 "http://transparency.270a.info/dataset/CPI2011"="Corruption Perceptions Index 2011",
