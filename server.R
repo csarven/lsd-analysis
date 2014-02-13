@@ -216,17 +216,15 @@ shinyServer(function(input, output, session) {
 
                     o <- HTML(paste0("
                         <img src=\"", url_protocol, "//", url_hostname, "/", plotPath, "\" width=\"100%\"/>
-
-                        <p id=\"download-csv\"><a href=\"", csvPath , "\">CSV</a></p>
                     "))
                 }
                 else {
                     o <- HTML(paste0("
                         <img src=\"", gsub("<|>", '', as.character(analysis$meta$graph)), "\" width=\"100%\"/>
-
-                        <p id=\"download-csv\"><a href=\"", csvPath , "\">CSV</a></p>
                     "))
                 }
+
+                o <- HTML(paste0(o, "<p id=\"download-csv\"><a href=\"", csvPath , "\">CSV</a></p>"))
 
                 cat(format(o))
             }
