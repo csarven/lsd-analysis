@@ -13,8 +13,8 @@ PREFIX stats: <http://stats.270a.info/vocab#>
 PREFIX provenance: <", siteURI, "provenance/>
 ")
 
-sparqlUpdate <- function(analysisURI, datasetX, datasetY, refPeriod, data, analysis) {
-    sparqlQueryStringEncoded <- URLencode(sparqlQueryString(datasetX, datasetY, refPeriod), reserved=TRUE)
+sparqlUpdateRegression <- function(analysisURI, datasetX, datasetY, refPeriod, data, analysis) {
+    sparqlQueryStringEncoded <- URLencode(sparqlQueryStringRegression(datasetX, datasetY, refPeriod), reserved=TRUE)
 
 
 #FIXME: xsd:decimal assignment is problematic because not all values are xsd:decimal!
@@ -122,7 +122,7 @@ sparqlQueryCheckAnalysis <- function(analysisURI) {
 }
 
 
-sparqlQueryGetAnalysisSummary <- function(analysisURI) {
+sparqlQueryGetAnalysisSummaryRegression <- function(analysisURI) {
     q <- paste0("
 PREFIX stats: <http://stats.270a.info/vocab#>
 
@@ -150,7 +150,7 @@ WHERE {
 
 
 
-sparqlQueryGetAnalysisData <- function(analysisURI) {
+sparqlQueryGetAnalysisDataRegression <- function(analysisURI) {
     q <- paste0("
 PREFIX stats: <http://stats.270a.info/vocab#>
 
@@ -174,13 +174,13 @@ WHERE {
 }
 
 
-sparqlQuery <- function(datasetX, datasetY, refPeriod) {
-    q <- sparqlQueryString(datasetX, datasetY, refPeriod)
+sparqlQueryRegression <- function(datasetX, datasetY, refPeriod) {
+    q <- sparqlQueryStringRegression(datasetX, datasetY, refPeriod)
     r <- SPARQL(sparqlEndpoints$stats, q)
     return(r$results)
 }
 
-sparqlQueryString <- function(datasetX, datasetY, refPeriod) {
+sparqlQueryStringRegression <- function(datasetX, datasetY, refPeriod) {
 #XXX: Move this to config
     datasetNameX <- gsub("http://([^.]*).270a.info/dataset/.*", "\\1", datasetX, perl=TRUE)
     datasetNameY <- gsub("http://([^.]*).270a.info/dataset/.*", "\\1", datasetY, perl=TRUE)
