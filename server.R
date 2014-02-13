@@ -23,23 +23,34 @@ shinyServer(function(input, output, session) {
 
     getData <- reactive({
         paths <- paths()
-        if(length(paths) == 2) {
-            return(NULL)
-        }
 
-        if(length(paths) == 5) {
-            s <- strsplit(c(s = paths[3]), ":")
-            datasetX <- paste0(namespaces[s$s[1]], s$s[2])
-            s <- strsplit(c(s = paths[4]), ":")
-            datasetY <- paste0(namespaces[s$s[1]], s$s[2])
-            s <- strsplit(c(s = paths[5]), ":")
-            refPeriod <- paste0(namespaces[s$s[1]], s$s[2])
-        }
-        else {
-            datasetX <- input$datasetX
-            datasetY <- input$datasetY
-            refPeriod <- input$refPeriod
-        }
+        switch(paste0("case", length(paths)),
+            case2={
+                return(NULL)
+            },
+            #Regression Analysis
+            case5={
+                s <- strsplit(c(s = paths[3]), ":")
+                datasetX <- paste0(namespaces[s$s[1]], s$s[2])
+                s <- strsplit(c(s = paths[4]), ":")
+                datasetY <- paste0(namespaces[s$s[1]], s$s[2])
+                s <- strsplit(c(s = paths[5]), ":")
+                refPeriod <- paste0(namespaces[s$s[1]], s$s[2])
+            },
+            #Time Series
+            case4={
+                s <- strsplit(c(s = paths[3]), ":")
+                datasetX <- paste0(namespaces[s$s[1]], s$s[2])
+                s <- strsplit(c(s = paths[4]), ":")
+                refPeriod <- paste0(namespaces[s$s[1]], s$s[2])
+            },
+            {
+                datasetX <- input$datasetX
+                datasetY <- input$datasetY
+                refPeriod <- input$refPeriod
+            }
+#            stop("Enter something that switches me!")
+        )
 
         analysisURI <- paste0(session$clientData$url_protocol, "//", session$clientData$url_hostname, strsplit(c(s = session$clientData$url_pathname), ".html"))
 
