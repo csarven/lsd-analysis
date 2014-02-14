@@ -9,11 +9,18 @@ source("config.R", local=TRUE)
 source("resourceLabels.R", local=TRUE)
 source("lib/sparql.R", local=TRUE)
 source("lib/regression.sparql.R", local=TRUE)
+source("lib/timeseries.sparql.R", local=TRUE)
+
+#sQCA <- memoise(sparqlQueryCheckAnalysis)
 sQRegression <- memoise(sparqlQueryRegression)
-sQCA <- memoise(sparqlQueryCheckAnalysis)
 sURegression <- memoise(sparqlUpdateRegression)
-sQGADRegression <- memoise(sparqlQueryGetAnalysisDataRegression)
+#sQGADRegression <- memoise(sparqlQueryGetAnalysisDataRegression)
 sQGASRegression <- memoise(sparqlQueryGetAnalysisSummaryRegression)
+
+sQTimeSeries <- memoise(sparqlQueryTimeSeries)
+sUTimeSeries <- memoise(sparqlUpdateTimeSeries)
+#sQGADTimeSeries <- memoise(sparqlQueryGetAnalysisDataTimeSeries)
+sQGASTimeSeries <- memoise(sparqlQueryGetAnalysisSummaryTimeSeries)
 
 
 shinyServer(function(input, output, session) {
@@ -22,12 +29,15 @@ shinyServer(function(input, output, session) {
     paths <- function() { unlist(strsplit(urlPath(), "/|.html")) }
 
     getData <- reactive({
+        analysisURI <- paste0(session$clientData$url_protocol, "//", session$clientData$url_hostname, strsplit(c(s = session$clientData$url_pathname), ".html"))
+
         paths <- paths()
 
+        if(length(paths) == 2) {
+            return(NULL)
+        }
+
         switch(paste0("case", length(paths)),
-            case2={
-                return(NULL)
-            },
             #Regression Analysis
             case5={
                 s <- strsplit(c(s = paths[3]), ":")
@@ -38,15 +48,19 @@ shinyServer(function(input, output, session) {
                 refPeriod <- paste0(namespaces[s$s[1]], s$s[2])
 
                 analysisParams = paste0(datasetX, datasetY, refPeriod)
+
+                analysisSummary <- sQGASRegression(analysisURI)
             },
             #Time Series
             case4={
                 s <- strsplit(c(s = paths[3]), ":")
                 datasetX <- paste0(namespaces[s$s[1]], s$s[2])
                 s <- strsplit(c(s = paths[4]), ":")
-                refPeriod <- paste0(namespaces[s$s[1]], s$s[2])
+                refArea <- paste0(namespaces[s$s[1]], s$s[2])
+#cat(paste0("paths: ", paths, " s: ", s, " refArea:", refArea ,"--"), file=stderr())
+                analysisParams = paste0(datasetX, refArea)
 
-                analysisParams = paste0(datasetX, refPeriod)
+                analysisSummary <- sQGASTimeSeries(analysisURI)
             },
             #XXX: What was this for?
             {
@@ -55,13 +69,12 @@ shinyServer(function(input, output, session) {
                 refPeriod <- input$refPeriod
 
                 analysisParams = paste0(datasetX, datasetY, refPeriod)
+
+                analysisSummary <- sQGASRegression(analysisURI)
             }
 #            stop("Enter something that switches me!")
         )
 
-        analysisURI <- paste0(session$clientData$url_protocol, "//", session$clientData$url_hostname, strsplit(c(s = session$clientData$url_pathname), ".html"))
-
-        analysisSummary <- sQGASRegression(analysisURI)
         if (length(analysisSummary) > 0) {
             #Exists in store
 
@@ -80,11 +93,13 @@ shinyServer(function(input, output, session) {
 
                     analysis <- list("datasetX"=datasetX, "datasetY"=datasetY, "refPeriod"=refPeriod, "data"=data, "meta"=meta, "id"=id)
                 },
+                #Time Series
                 case4={
-                    analysis <- list("datasetX"=datasetX, "refPeriod"=refPeriod, "data"=data, "meta"=meta, "id"=id)
+                    meta <- data.frame("n"=analysisSummary$n, "graph"=analysisSummary$graph)
+
+                    analysis <- list("datasetX"=datasetX, "refArea"=refArea, "data"=data, "meta"=meta, "id"=id)
                 },
-                {
-                }
+                {}
             )
 
 #print(session$sendCustomMessage)
@@ -100,12 +115,16 @@ shinyServer(function(input, output, session) {
                 case5={
                     data <- sQRegression(datasetX, datasetY, refPeriod)
                 },
+                #Time Series
                 case4={
-                    data <- sQTimeSeries(datasetX, refPeriod)
+                    data <- sQTimeSeries(datasetX, refArea)
                 },
-                {
-                }
+                {}
             )
+
+#cat(paste0("data: ", data), file=stderr())
+#cat(paste0("data: ", data, " length(data[,1]): ", length(data[,1]), " data[2, 'refPeriodX']: ", data[2, 'refPeriodX']), file=stderr())
+
 
             if (length(data) > 0) {
                 switch(paste0("case", length(paths)),
@@ -117,16 +136,19 @@ shinyServer(function(input, output, session) {
                         #Update store
                         storeUpdated <- sURegression(analysisURI, datasetX, datasetY, refPeriod, data, analysis)
                     },
+                    #Time Series
                     case4={
-                        ###TODO
+                        #Build analysis
+                        analysis <- getAnalysisTimeSeries(datasetX, refArea, data)
+                        #Update store
+                        storeUpdated <- sUTimeSeries(analysisURI, datasetX, refArea, data, analysis)
                     },
-                    {
-                    }
+                    {}
                 )
             }
-            else {
-                analysis <- list("warning" = paste0("<p class=\"warning\">Insufficient observations to analyze <em><a href=\"", datasetX, "\">", resourceLabels[datasetX], "</a></em> and <em><a href=\"", datasetY, "\">", resourceLabels[datasetY], "</a> for reference period <a href=\"", refPeriod, "\">", resourceLabels[refPeriod], "</a></em>. Please try a different combination.</p>"))
-            }
+#            else {
+#                analysis <- list("warning" = paste0("<p class=\"warning\">Insufficient observations to analyze <em><a href=\"", datasetX, "\">", resourceLabels[datasetX], "</a></em> and <em><a href=\"", datasetY, "\">", resourceLabels[datasetY], "</a> for reference period <a href=\"", refPeriod, "\">", resourceLabels[refPeriod], "</a></em>. Please try a different combination.</p>"))
+#            }
         }
 
         return(analysis)
@@ -183,110 +205,165 @@ shinyServer(function(input, output, session) {
 
 
 
+    getAnalysisTimeSeries <- function(datasetX, refArea, data) {
+        id <- digest(paste0(datasetX, refArea), algo="sha1", serialize=FALSE)
+
+        write.csv(data, file=paste0("www/csv/", id, ".csv"))
+
+        meta <- data.frame("n"= nrow(data$x))
+
+        return(list("datasetX"=datasetX, "refArea"=refArea, "data"=data, "meta"=meta, "id"=id))
+    }
+
+
     output$plot <- renderPrint({
         paths <- paths()
 
-        switch(paste0("case", length(paths)),
-            #Regression Analysis
-            case5={
-                analysis <- getData()
+        if(length(paths) != 2) {
+            switch(paste0("case", length(paths)),
+                #Regression Analysis
+                case5={
+                    analysis <- getData()
 
-                if (is.null(analysis[["warning"]])) {
-                    csvPath <- paste0("/csv/", analysis$id, ".csv")
+                    if (is.null(analysis[["warning"]])) {
+                        csvPath <- paste0("/csv/", analysis$id, ".csv")
 
-                    if (is.null(analysis$meta$graph)) {
-                        url_protocol <- session$clientData$url_protocol
-                        url_hostname <- session$clientData$url_hostname
-                        url_pathname <- session$clientData$url_pathname
+                        if (is.null(analysis$meta$graph)) {
+                            url_protocol <- session$clientData$url_protocol
+                            url_hostname <- session$clientData$url_hostname
+                            url_pathname <- session$clientData$url_pathname
 
-                        plotPath <- paste0("plots/", analysis$id, ".svg")
+                            plotPath <- paste0("plots/", analysis$id, ".svg")
 
-                        if (!file.exists(paste0("www/", plotPath))) {
-                            data <- analysis$data
-                            x <- data$x
-                            y <- data$y
-                            xLabel <- resourceLabels[analysis$datasetX]
-                            yLabel <- resourceLabels[analysis$datasetY]
+                            if (!file.exists(paste0("www/", plotPath))) {
+                                data <- analysis$data
+                                x <- data$x
+                                y <- data$y
+                                xLabel <- resourceLabels[analysis$datasetX]
+                                yLabel <- resourceLabels[analysis$datasetY]
 
-                            refPeriod <- resourceLabels[analysis$refPeriod]
-                            correlation <- analysis$meta$correlation
-                            pValue <- analysis$meta$pValue
-                            bestModel <- analysis$meta$bestModel
+                                refPeriod <- resourceLabels[analysis$refPeriod]
+                                correlation <- analysis$meta$correlation
+                                pValue <- analysis$meta$pValue
+                                bestModel <- analysis$meta$bestModel
 
-                            identityXCount <- length(unique(data$identityX))
-                            identityYCount <- length(unique(data$identityY))
-                            Group <- ''
-                            if (identityYCount >= identityXCount) {
-                                Group <- data$identityY
-                            }
-                            else {
-                                Group <- data$identityX
-                            }
-
-                            g <- ggplot(data, environment = environment(), aes(x=data$x, y=data$y)) + geom_point(size=2, shape=1) + labs(list(x=xLabel, y=yLabel, title=paste0(refPeriod, " correlation")))
-
-                            if (length(unique(Group)) > 1) {
-                                plot_labeller <- function(variable, value){
-                                    return(resourceLabels[gsub("<|>", '', as.character(value))])
-                                }
-
-                                g <- g + facet_grid(identityY ~ identityX, labeller=plot_labeller) + theme(legend.position="none")
-                            }
-
-                    #TODO: Refactor
-        #                    statsmooth <- ''
-                            if (bestModel == "y ~ x") {
-                                g <- g + stat_smooth(method=lm, formula = y ~ x, na.rm=TRUE)
-                            }
-                            else {
-                                if (bestModel == "y ~ log(x)") {
-                                    g <- g + stat_smooth(method=lm, formula = y ~ log(x), na.rm=TRUE)
+                                identityXCount <- length(unique(data$identityX))
+                                identityYCount <- length(unique(data$identityY))
+                                Group <- ''
+                                if (identityYCount >= identityXCount) {
+                                    Group <- data$identityY
                                 }
                                 else {
-                                    if (bestModel == "y ~ poly(x, 2, raw=TRUE)") {
-                                        g <- g + stat_smooth(method=lm, formula = y ~ poly(x, 2, raw=TRUE), na.rm=TRUE)
+                                    Group <- data$identityX
+                                }
+
+                                g <- ggplot(data, environment = environment(), aes(x=data$x, y=data$y)) + geom_point(size=2, shape=1) + labs(list(x=xLabel, y=yLabel, title=paste0(refPeriod, " correlation")))
+
+                                if (length(unique(Group)) > 1) {
+                                    plot_labeller <- function(variable, value){
+                                        return(resourceLabels[gsub("<|>", '', as.character(value))])
+                                    }
+
+                                    g <- g + facet_grid(identityY ~ identityX, labeller=plot_labeller) + theme(legend.position="none")
+                                }
+
+                        #TODO: Refactor
+            #                    statsmooth <- ''
+                                if (bestModel == "y ~ x") {
+                                    g <- g + stat_smooth(method=lm, formula = y ~ x, na.rm=TRUE)
+                                }
+                                else {
+                                    if (bestModel == "y ~ log(x)") {
+                                        g <- g + stat_smooth(method=lm, formula = y ~ log(x), na.rm=TRUE)
                                     }
                                     else {
-                                        if (bestModel == "y ~ poly(x, 3, raw=TRUE)") {
-                                           g <- g + stat_smooth(method=lm, formula = y ~ poly(x, 3, raw=TRUE), na.rm=TRUE)
+                                        if (bestModel == "y ~ poly(x, 2, raw=TRUE)") {
+                                            g <- g + stat_smooth(method=lm, formula = y ~ poly(x, 2, raw=TRUE), na.rm=TRUE)
+                                        }
+                                        else {
+                                            if (bestModel == "y ~ poly(x, 3, raw=TRUE)") {
+                                               g <- g + stat_smooth(method=lm, formula = y ~ poly(x, 3, raw=TRUE), na.rm=TRUE)
+                                            }
                                         }
                                     }
                                 }
+
+            #                    g <- g + stat_smooth()
+
+                                g <- g + annotate("text", x=Inf, y=Inf, label="270a.info", hjust=1.3, vjust=2, color="#0000E4", size=4)
+
+            #                    width <- 7 * length(unique(Group))
+
+                                ggsave(plot=g, file=paste0("www/", plotPath), width=7, height=7)
                             }
 
-        #                    g <- g + stat_smooth()
+            #                sparqlQueryStringEncoded <- URLencode(sparqlQueryString(analysis$datasetX, analysis$datasetY, analysis$refPeriod))
+            #                sparqlQueryURI <- paste0("http://stats.270a.info/sparql?query=", sparqlQueryStringEncoded)
 
-                            g <- g + annotate("text", x=Inf, y=Inf, label="270a.info", hjust=1.3, vjust=2, color="#0000E4", size=4)
-
-        #                    width <- 7 * length(unique(Group))
-
-                            ggsave(plot=g, file=paste0("www/", plotPath), width=7, height=7)
+                            o <- HTML(paste0("
+                                <img src=\"", url_protocol, "//", url_hostname, "/", plotPath, "\" width=\"100%\"/>
+                            "))
+                        }
+                        else {
+                            o <- HTML(paste0("
+                                <img src=\"", gsub("<|>", '', as.character(analysis$meta$graph)), "\" width=\"100%\"/>
+                            "))
                         }
 
-        #                sparqlQueryStringEncoded <- URLencode(sparqlQueryString(analysis$datasetX, analysis$datasetY, analysis$refPeriod))
-        #                sparqlQueryURI <- paste0("http://stats.270a.info/sparql?query=", sparqlQueryStringEncoded)
+                        o <- HTML(paste0(o, "<p id=\"download-csv\"><a href=\"", csvPath , "\">CSV</a></p>"))
 
-                        o <- HTML(paste0("
-                            <img src=\"", url_protocol, "//", url_hostname, "/", plotPath, "\" width=\"100%\"/>
-                        "))
-                    }
-                    else {
-                        o <- HTML(paste0("
-                            <img src=\"", gsub("<|>", '', as.character(analysis$meta$graph)), "\" width=\"100%\"/>
-                        "))
+                        cat(format(o))
                     }
 
-                    o <- HTML(paste0(o, "<p id=\"download-csv\"><a href=\"", csvPath , "\">CSV</a></p>"))
+                },
+                #Time Series
+                case4={
+                    analysis <- getData()
 
-                    cat(format(o))
-                }
+                    if (is.null(analysis[["warning"]])) {
+                        csvPath <- paste0("/csv/", analysis$id, ".csv")
 
-            },
-            case4={
-            },
-            {
-            }
-        )
+                        if (is.null(analysis$meta$graph)) {
+                            url_protocol <- session$clientData$url_protocol
+                            url_hostname <- session$clientData$url_hostname
+                            url_pathname <- session$clientData$url_pathname
+
+                            plotPath <- paste0("plots/", analysis$id, ".svg")
+
+                            if (!file.exists(paste0("www/", plotPath))) {
+                                data <- analysis$data
+                                x <- data$x
+                                datasetXLabel <- resourceLabels[analysis$datasetX]
+                                refArea <- resourceLabels[analysis$refArea]
+
+                                g <- ggplot(data, environment = environment(), aes(x=data$refPeriod, y=data$x)) + geom_line(aes=(size=2)) + labs(list(x="Reference Period", y="Value", title=paste0(datasetXLabel, " for ", refArea)))
+
+
+                                g <- g + annotate("text", x=Inf, y=Inf, label="270a.info", hjust=1.3, vjust=2, color="#0000E4", size=4)
+
+                                ggsave(plot=g, file=paste0("www/", plotPath), width=7, height=7)
+                            }
+
+
+                            o <- HTML(paste0("
+                                <img src=\"", url_protocol, "//", url_hostname, "/", plotPath, "\" width=\"100%\"/>
+                            "))
+                        }
+                        else {
+                            o <- HTML(paste0("
+                                <img src=\"", gsub("<|>", '', as.character(analysis$meta$graph)), "\" width=\"100%\"/>
+                            "))
+                        }
+
+                        o <- HTML(paste0(o, "<p id=\"download-csv\"><a href=\"", csvPath , "\">CSV</a></p>"))
+
+                        cat(format(o))
+                    }
+                },
+                {}
+            )
+
+        }
     })
 
 
@@ -294,44 +371,69 @@ shinyServer(function(input, output, session) {
     output$statsSummary <- renderPrint({
         paths <- paths()
 
-        switch(paste0("case", length(paths)),
-            #Regression Analysis
-            case5={
-                analysis <- getData()
+        if(length(paths) != 2) {
+            switch(paste0("case", length(paths)),
+                #Regression Analysis
+                case5={
+                    analysis <- getData()
 
-                if (is.null(analysis[["warning"]])) {
-                    o <- HTML(paste0("
-                        <table id=\"lsd-analysis-results\">
-                            <caption>Analysis results</caption>
-                            <tbody>
-                                <tr><th>Independent variable</th><td><a href=\"", analysis$datasetX, "\">", resourceLabels[analysis$datasetX] ,"</a></td></tr>
-                                <tr><th>Dependent variable</th><td><a href=\"", analysis$datasetY, "\">", resourceLabels[analysis$datasetY] ,"</a></td></tr>
-                                <tr><th>Reference period</th><td><a href=\"", analysis$refPeriod, "\">", resourceLabels[analysis$refPeriod] ,"</a></td></tr>
-                                <tr><th>N (sample size)</th><td>", nrow(analysis$data), "</td></tr>
-                                <tr><th>Correlation (", correlationMethod, ")</th><td>", analysis$meta$correlation, "</td></tr>
-                                <tr><th>p-value</th><td>", analysis$meta$pValue, "</td></tr>
-                                <tr><th>Adjusted R<sup>2</sup> (max tested)</th><td>", as.character(analysis$meta$maxAdjustedRSquared), "</td></tr>
-                                <tr><th>Linear model (best tested)</th><td>", as.character(analysis$meta$bestModel), "</td></tr>
-                            </tbody>
-                        <table>
+                    if (is.null(analysis[["warning"]])) {
+                        o <- HTML(paste0("
+                            <table id=\"lsd-analysis-results\">
+                                <caption>Analysis results</caption>
+                                <tbody>
+                                    <tr><th>Independent variable</th><td><a href=\"", analysis$datasetX, "\">", resourceLabels[analysis$datasetX] ,"</a></td></tr>
+                                    <tr><th>Dependent variable</th><td><a href=\"", analysis$datasetY, "\">", resourceLabels[analysis$datasetY] ,"</a></td></tr>
+                                    <tr><th>Reference period</th><td><a href=\"", analysis$refPeriod, "\">", resourceLabels[analysis$refPeriod] ,"</a></td></tr>
+                                    <tr><th>N (sample size)</th><td>", nrow(analysis$data), "</td></tr>
+                                    <tr><th>Correlation (", correlationMethod, ")</th><td>", analysis$meta$correlation, "</td></tr>
+                                    <tr><th>p-value</th><td>", analysis$meta$pValue, "</td></tr>
+                                    <tr><th>Adjusted R<sup>2</sup> (max tested)</th><td>", as.character(analysis$meta$maxAdjustedRSquared), "</td></tr>
+                                    <tr><th>Linear model (best tested)</th><td>", as.character(analysis$meta$bestModel), "</td></tr>
+                                </tbody>
+                            <table>
 
-                        <p id=\"oh-yeah\"><a href=\"", siteURI, "provenance/", analysis$id, "\">Oh yeah?</a></p>
-                    "))
+                            <p id=\"oh-yeah\"><a href=\"", siteURI, "provenance/", analysis$id, "\">Oh yeah?</a></p>
+                        "))
 
-                    cat(format(o))
+                        cat(format(o))
+                    }
+                    else {
+                        warning <- analysis[["warning"]]
+                        o <- HTML(warning)
+
+                        cat(format(o))
+                    }
+                },
+                #Time Series
+                case4={
+                    analysis <- getData()
+
+                    if (is.null(analysis[["warning"]])) {
+                        o <- HTML(paste0("
+                            <table id=\"lsd-analysis-results\">
+                                <caption>Analysis results</caption>
+                                <tbody>
+                                    <tr><th>Time Series</th><td><a href=\"", analysis$datasetX, "\">", resourceLabels[analysis$datasetX] ,"</a></td></tr>
+                                    <tr><th>N (sample size)</th><td>", nrow(analysis$data), "</td></tr>
+                                </tbody>
+                            <table>
+
+                            <p id=\"oh-yeah\"><a href=\"", siteURI, "provenance/", analysis$id, "\">Oh yeah?</a></p>
+                        "))
+
+                        cat(format(o))
+                    }
+                    else {
+                        warning <- analysis[["warning"]]
+                        o <- HTML(warning)
+
+                        cat(format(o))
+                    }
+                },
+                {
                 }
-                else {
-                    warning <- analysis[["warning"]]
-                    o <- HTML(warning)
-
-                    cat(format(o))
-                }
-            },
-            case4={
-  
-            },
-            {
-            }
-        )
+            )
+        }
     })
 })

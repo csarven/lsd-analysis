@@ -15,6 +15,7 @@ resourceLabels <- list(
 "http://reference.data.gov.uk/id/year/2012"="2012",
 "http://reference.data.gov.uk/id/year/2013"="2013",
 
+"http://worldbank.270a.info/classification/country/CA"="Canada",
 
 "http://worldbank.270a.info/dataset/allsi.lekbf_q1"="% benefits held by non poor -All Social Insurance",
 "http://worldbank.270a.info/dataset/allsp.lekbf_q1"="% benefits held by non poor -All Social Protection",

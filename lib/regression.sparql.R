@@ -145,28 +145,28 @@ WHERE {
 
 
 
-sparqlQueryGetAnalysisDataRegression <- function(analysisURI) {
-    q <- paste0("
-PREFIX stats: <http://stats.270a.info/vocab#>
+#sparqlQueryGetAnalysisDataRegression <- function(analysisURI) {
+#    q <- paste0("
+#PREFIX stats: <http://stats.270a.info/vocab#>
 
-SELECT DISTINCT ?refAreaY ?x ?y ?identityX ?identityY
-WHERE {
-    GRAPH <http://stats.270a.info/graph/analysis> {
-        <", analysisURI, ">
-            stats:data [
-                stats:refArea ?refAreaY ;
-                stats:measureX ?x ;
-                stats:measureY ?y ;
-                stats:identityX ?identityX ;
-                stats:identityY ?identityY
-            ]
-    }
-}
-");
+#SELECT DISTINCT ?refAreaY ?x ?y ?identityX ?identityY
+#WHERE {
+#    GRAPH <http://stats.270a.info/graph/analysis> {
+#        <", analysisURI, ">
+#            stats:data [
+#                stats:refArea ?refAreaY ;
+#                stats:measureX ?x ;
+#                stats:measureY ?y ;
+#                stats:identityX ?identityX ;
+#                stats:identityY ?identityY
+#            ]
+#    }
+#}
+#");
 
-    r <- SPARQL(sparqlServiceQueryURI, q)
-    return(r$results)
-}
+#    r <- SPARQL(sparqlServiceQueryURI, q)
+#    return(r$results)
+#}
 
 
 sparqlQueryRegression <- function(datasetX, datasetY, refPeriod) {
