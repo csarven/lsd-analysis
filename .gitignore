@@ -1,1 +1,3 @@
 config.R
+www/plots/*
+www/csv/*
