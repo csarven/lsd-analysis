@@ -155,7 +155,7 @@ WHERE {
         WHERE {
             ?observationX qb:dataSet <", datasetX, "> .
             ?propertyRefArea rdfs:subPropertyOf* sdmx-dimension:refArea .
-            ?observationX ?propertyrefArea <", refArea, "> .
+            ?observationX ?propertyRefArea <", refArea, "> .
             ?propertyRefPeriodX rdfs:subPropertyOf* sdmx-dimension:refPeriod .
             ?observationX ?propertyRefPeriodX ?refPeriodXURI .
             ?propertyMeasureX rdfs:subPropertyOf* sdmx-measure:obsValue .
