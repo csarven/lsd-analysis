@@ -16,6 +16,8 @@ source("lib/regression/sparql.R", local=TRUE)
 source("lib/regression/analysis.R", local=TRUE)
 source("lib/timeseries/sparql.R", local=TRUE)
 source("lib/timeseries/analysis.R", local=TRUE)
+source("lib/groupedbarplot/sparql.R", local=TRUE)
+source("lib/groupedbarplot/analysis.R", local=TRUE)
 
 #sQCA <- memoise(sparqlQueryCheckAnalysis)
 sQRegression <- memoise(sparqlQueryRegression)
@@ -27,6 +29,11 @@ sQTimeSeries <- memoise(sparqlQueryTimeSeries)
 sUTimeSeries <- memoise(sparqlUpdateTimeSeries)
 #sQGADTimeSeries <- memoise(sparqlQueryGetAnalysisDataTimeSeries)
 sQGASTimeSeries <- memoise(sparqlQueryGetAnalysisSummaryTimeSeries)
+
+sQGroupedBarPlot <- memoise(sparqlQueryGroupedBarPlot)
+sUGroupedBarPlot <- memoise(sparqlUpdateGroupedBarPlot)
+#sQGADGroupedBarPlot <- memoise(sparqlQueryGetAnalysisDataGroupedBarPlot)
+sQGASGroupedBarPlot <- memoise(sparqlQueryGetAnalysisSummaryGroupedBarPlot)
 
 
 shinyServer(function(input, output, session) {
@@ -46,7 +53,7 @@ shinyServer(function(input, output, session) {
         }
 
         switch(paste0("case", length(paths)),
-            #Regression Analysis
+            #Regression Analysis http://stats.270a.info/analysis/worldbank:SP.DYN.IMRT.IN/transparency:CPI2009/year:2009.html
             case5={
                 s <- strsplit(c(s = paths[3]), ":")
                 datasetX <- paste0(namespaces[s$s[1]], s$s[2])
@@ -59,16 +66,42 @@ shinyServer(function(input, output, session) {
 
                 analysisSummary <- sQGASRegression(analysisURI)
             },
-            #Time Series
+            #Time Series http://localhost.stats.270a.info/analysis/worldbank:SP.DYN.IMRT.IN/wbcountry:CH.html
             case4={
+                print ("test")
                 s <- strsplit(c(s = paths[3]), ":")
+                print(s)
                 datasetX <- paste0(namespaces[s$s[1]], s$s[2])
                 s <- strsplit(c(s = paths[4]), ":")
                 refArea <- paste0(namespaces[s$s[1]], s$s[2])
 #cat(paste0("paths: ", paths, " s: ", s, " refArea:", refArea ,"--"), file=stderr())
                 analysisParams = paste0(datasetX, refArea)
+                print(datasetX)
+                print(refArea)
+                print(analysisParams)
 
                 analysisSummary <- sQGASTimeSeries(analysisURI)
+            },
+ unlist(strsplit("http://localhost.stats.270a.info/analysis/dev/worldbank:SE.XPD.PRIM.PC.ZS/CA,FR/2009.html", "/|.html"))
+            #Grouped Bar Plot Analysis http://localhost.stats.270a.info/analysis/dev/worldbank:SE.XPD.PRIM.PC.ZS/CA,FR/2009.html
+            case6={
+                print ("test")
+                s <- strsplit(c(s = paths[4]), ":")
+                print(s)
+                datasetX <- paste0(namespaces[s$s[1]], s$s[2])
+                s <- strsplit(c(s = paths[5]), ",")
+                refArea <- paste0(namespaces[s$s[1]], s$s[2])
+                s <- strsplit(c(s = paths[6]), ":")
+                refPeriod <- paste0(namespaces[s$s[1]], s$s[2])
+
+                analysisParams = paste0(datasetX, refArea)
+
+                print(datasetX)
+                print(refArea)
+                print(refPeriod)
+                print(analysisParams)
+
+                analysisSummary <- sQGASGroupedBarPlot(analysisURI)
             },
             #XXX: What was this for?
             {
@@ -107,6 +140,12 @@ shinyServer(function(input, output, session) {
 
                     analysis <- list("datasetX"=datasetX, "refArea"=refArea, "data"=data, "meta"=meta, "id"=id)
                 },
+                #Grouped Bar Plot
+                case6={
+                    meta <- data.frame("n"=analysisSummary$n, "graph"=analysisSummary$graph)
+
+                    analysis <- list("datasetX"=datasetX, "refArea"=refArea, "data"=data, "meta"=meta, "id"=id)
+                },
                 {}
             )
 
@@ -126,6 +165,10 @@ shinyServer(function(input, output, session) {
                 #Time Series
                 case4={
                     data <- sQTimeSeries(datasetX, refArea)
+                },
+                #Grouped Bar Plot
+                case6={
+                    data <- sQGroupedBarPlot(datasetX, refArea)
                 },
                 {}
             )
@@ -150,6 +193,13 @@ shinyServer(function(input, output, session) {
                         analysis <- getAnalysisTimeSeries(datasetX, refArea, data)
                         #Update store
                         storeUpdated <- sUTimeSeries(analysisURI, datasetX, refArea, data, analysis)
+                    },
+                  #Grouped Bar Plot
+                    case6={
+                        #Build analysis
+                        analysis <- getAnalysisGroupedBarPlot(datasetX, refArea, data)
+                        #Update store
+                        storeUpdated <- sUGroupedBarPlot(analysisURI, datasetX, refArea, data, analysis)
                     },
                     {}
                 )
@@ -179,6 +229,10 @@ shinyServer(function(input, output, session) {
                 case4={
                     outputPlotTimeSeries(analysis)
                 },
+                #Grouped Bar Plot
+                case6={
+                    outputPlotGroupedBarPlot(analysis)
+                },
                 {}
             )
 
@@ -201,6 +255,10 @@ cat(paste0(analysis), file=stderr())
                 #Time Series
                 case4={
                     outputAnalysisSummaryTimeSeries(analysis)
+                },
+                #Grouped Bar Plot
+                case6={
+                    outputAnalysisSummaryGroupedBarPlot(analysis)
                 },
                 {
                 }
