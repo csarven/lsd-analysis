@@ -90,7 +90,8 @@ shinyServer(function(input, output, session) {
                 print(s)
                 datasetX <- paste0(namespaces[s$s[1]], s$s[2])
                 s <- strsplit(c(s = paths[5]), ",")
-                refArea <- paste0(namespaces[s$s[1]], s$s[2])
+                #refArea <- paste0(namespaces[s$s[1]], s$s[2])
+                refArea <- paste0(s$s[1]) 
                 s <- strsplit(c(s = paths[6]), ":")
                 refPeriod <- paste0(namespaces[s$s[1]], s$s[2])
 
