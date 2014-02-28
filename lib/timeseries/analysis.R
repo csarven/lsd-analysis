@@ -13,11 +13,21 @@ outputPlotTimeSeries <- function(analysis) {
     if (is.null(analysis[["warning"]])) {
         csvPath <- paste0("/csv/", analysis$id, ".csv")
 
+        print("Warning PLOT")
+        print(analysis$datasetX)
+        print(analysis$refArea)
+        print(analysis$refPeriod)
+        print(analysis$data)
+        print(analysis$data$x)
+
         if (is.null(analysis$meta$graph)) {
             plotPath <- paste0("plots/", analysis$id, ".svg")
 
             if (!file.exists(paste0("www/", plotPath))) {
                 data <- analysis$data
+
+                print(data)
+                
                 x <- data$x
                 datasetXLabel <- resourceLabels[analysis$datasetX]
                 refArea <- resourceLabels[analysis$refArea]

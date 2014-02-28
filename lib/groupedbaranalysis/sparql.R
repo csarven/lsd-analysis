@@ -13,8 +13,8 @@ PREFIX stats: <http://stats.270a.info/vocab#>
 PREFIX provenance: <", siteURI, "provenance/>
 ")
 
-sparqlUpdateGroupedBarPlot <- function(analysisURI, datasetX, refArea, data, analysis) {
-    sparqlQueryStringEncoded <- URLencode(sparqlQueryStringGroupedBarPlot(datasetX, refArea), reserved=TRUE)
+sparqlUpdateGroupedBarPlot <- function(analysisURI, datasetX, datasetY, refArea, refPeriod, data, analysis) { # refPeriod & datasetY hinzugefügt
+    sparqlQueryStringEncoded <- URLencode(sparqlQueryStringGroupedBarPlot(datasetX, datasetY, refArea, refPeriod), reserved=TRUE) # refPeriod & datasetY hinzugefügt
 
 #cat(paste0(data), file=stderr())
 #cat(data[,1], file=stderr())
@@ -25,8 +25,10 @@ sparqlUpdateGroupedBarPlot <- function(analysisURI, datasetX, refArea, data, ana
         statsData <- paste0(statsData, "
             stats:data [
                 a stats:DataRow ;
-                stats:refPeriodX ", data[i, 'refPeriodX'], " ;
-                stats:measureX \"", data[i, 'x'], "\"^^xsd:decimal
+                stats:refArea \"", data[i, 'refArea'], "\" ;  
+                stats:measureX \"", data[i, 'x'], "\"^^xsd:decimal ;
+                #measureY hinzugefügt
+                stats:measureY \"", data[i, 'y'], "\"^^xsd:decimal 
             ] ;"
         )
     }
@@ -44,26 +46,28 @@ sparqlUpdateGroupedBarPlot <- function(analysisURI, datasetX, refArea, data, ana
 
     now <- strftime(Sys.time(), "%Y-%m-%dT%H:%M:%SZ")
 
-    plotURI <- paste0(siteURI, "plots/", digest(paste0(datasetX, refArea), algo="sha1", serialize=FALSE), ".svg")
+    plotURI <- paste0(siteURI, "plots/", digest(paste0(datasetX, datasetY, refArea, refPeriod), algo="sha1", serialize=FALSE), ".svg") # refPeriod  & datasetY hinzugefügt
 
     sparqlQueryURI <- paste0("<", sparqlEndpoints$stats, "?query=", sparqlQueryStringEncoded, ">")
+  
 
     query <- paste0("
 INSERT DATA {
     GRAPH <http://stats.270a.info/graph/analysis> {
         ", sparqlQueryURI, "
-            rdfs:label \"SPARQL Query URI to retrieve the data for '", resourceLabels[datasetX], "' and '", resourceLabels[refArea], "'\"@en .
+            rdfs:label \"SPARQL Query URI to retrieve the data for '", resourceLabels[datasetX], "' and '", resourceLabels[datasetY], "'\"@en .
 
         provenance:", analysis$id, "
             a prov:Activity ;
-            rdfs:label \"Generated Analysis '", resourceLabels[datasetX], "' and '", resourceLabels[refArea], "'\"@en ;
+            rdfs:label \"Generated Analysis '", resourceLabels[datasetX], "' and '", resourceLabels[datasetY], "'\"@en ;
 
             prov:startedAtTime \"", now, "\"^^xsd:dateTime ;
             prov:wasAssociatedWith <http://csarven.ca/#i> ;
             prov:used ", sparqlQueryURI, " ;
             prov:used <https://github.com/csarven/lsd-analysis> ;
             prov:used <", datasetX, "> ;
-            prov:used <", refArea, "> ;
+            prov:used <", datasetY, "> ; # datasetY hinzugefügt
+            #prov:used <", refArea, "> ; # TODO: refArea entfernen
 
             prov:generated <", analysisURI, "> ;
             dcterms:license <", licenseURI, ">
@@ -72,7 +76,7 @@ INSERT DATA {
         <", analysisURI, ">
             a stats:Analysis ;
             a prov:Entity ;
-            rdfs:label \"Analysis of '", resourceLabels[datasetX], "' and '", resourceLabels[refArea], "'\"@en ;
+            rdfs:label \"Analysis of '", resourceLabels[datasetX], "' and '", resourceLabels[datasetY], "'\"@en ;
 
             prov:wasGeneratedBy provenance:", analysis$id, " ;
             prov:generatedAtTime \"", now, "\"^^xsd:dateTime ;
@@ -84,7 +88,8 @@ INSERT DATA {
             stats:graph <", plotURI ,"> ;
 
             stats:datasetX <", datasetX, "> ;
-            stats:refArea <", refArea, "> ;
+            stats:datasetX <", datasetY, "> ; # datasetY hinzugefügt
+            #stats:refArea <", refArea, "> ; # TODO: refArea entfernen
 
             stats:n \"", nrow(data), "\"^^xsd:integer
         .
@@ -106,6 +111,8 @@ INSERT DATA {
 
 
 sparqlQueryGetAnalysisSummaryGroupedBarPlot <- function(analysisURI) {
+   
+
     q <- paste0("
 PREFIX stats: <http://stats.270a.info/vocab#>
 
@@ -114,7 +121,8 @@ WHERE {
     GRAPH <http://stats.270a.info/graph/analysis> {
         <", analysisURI, ">
             stats:datasetX ?datasetX ;
-            stats:refArea ?refArea ;
+            stats:datasetY ?datasetY ; # datasetY hinzugefügt
+            #stats:refArea ?refArea ; # TODO: refArea entfernen
             stats:graph ?graph ;
             stats:n ?n ;
     }
@@ -129,43 +137,94 @@ WHERE {
 
 
 
-sparqlQueryGroupedBarPlot <- function(datasetX, refArea) {
-    q <- sparqlQueryStringGroupedBarPlot(datasetX, refArea)
+sparqlQueryGroupedBarPlot <- function(datasetX, datasetY, refArea, refPeriod) { # refPeriod & datasetY hinzugefügt
+    q <- sparqlQueryStringGroupedBarPlot(datasetX, datasetY, refArea, refPeriod) # refPeriod & datasetY hinzugefügt
     r <- SPARQL(sparqlEndpoints$stats, q)
     return(r$results)
 }
 
-sparqlQueryStringGroupedBarPlot <- function(datasetX, refArea) {
+# erhält Daten aus sQGroupedBarPlot(....) aus server.R
+sparqlQueryStringGroupedBarPlot <- function(datasetX, datasetY, refArea, refPeriod) { # refPeriod & datasetY hinzugefügt
 #XXX: Move this to config
     datasetNameX <- gsub("http://([^.]*).270a.info/dataset/.*", "\\1", datasetX, perl=TRUE)
+    datasetNameY <- gsub("http://([^.]*).270a.info/dataset/.*", "\\1", datasetY, perl=TRUE) # datasetY hinzugefügt
 #print(datasetNameX)
 
     domainX <- gsub("http://([^/]*).*", "\\1", datasetX, perl=TRUE)
+    domainY <- gsub("http://([^/]*).*", "\\1", datasetY, perl=TRUE) # datasetY hinzugefügt
 #print(domainX)
 
-    if (datasetNameX != datasetX) {
+    if (datasetNameX != datasetX && datasetNameY != datasetY) { # ganzer Block hinzugefügt (3 Zeilen & obere 2 Zeilen auskommentiert)
         endpointX <- sparqlEndpoints[datasetNameX]
+        endpointY <- sparqlEndpoints[datasetNameY]
+
+        print(paste0("RefAreaListe: ", refArea))
+        
+        # Splits refAreas & writes them in Vector
+        s <- strsplit(c(s = refArea), ",") # trennt refArea, wo "," sind & schreibt in Vector -> refArea besteht aus allen refAreas in URL
+
+        # TODO: Schleife, die durch refArea geht, je nach dem wie viele refAreas in URL vorhanden sind
+        #for(i in 1:length(refArea)) {
+        #    print(s$s[i])
+        #}  
+        
+        # TODO: Teil wird nicht benötigt -> Ausgabe in SPARQL Query mit s$s[1] usw.
+        refArea1 <- s$s[1] # teilt 1. refArea der refArea1 zu
+        refArea2 <- s$s[2] # teilt 2. refArea der refArea2 zu
+        print(paste0("REFAREA1: ", refArea1))
+        print(paste0("REFAREA2: ", refArea2))
+
+
 #print(endpointX)
 
+# TODO: eigenes SPARQL Query einbauen
     query <- paste0("
-SELECT DISTINCT ?refPeriodX ?x
+SELECT DISTINCT ?refArea ?x ?y # ?refPeriodX in ?refArea geändert, ?y hinzugefügt
 WHERE {
     SERVICE <",endpointX,"> {
-        SELECT DISTINCT ?refPeriodX ?x
+        SELECT DISTINCT ?refArea ?x # ?refPeriodX in ?refArea geändert
         WHERE {
             ?observationX qb:dataSet <", datasetX, "> .
+
             ?propertyRefArea rdfs:subPropertyOf* sdmx-dimension:refArea .
-            ?observationX ?propertyrefArea <", refArea, "> .
-            ?propertyRefPeriodX rdfs:subPropertyOf* sdmx-dimension:refPeriod .
-            ?observationX ?propertyRefPeriodX ?refPeriodXURI .
+            ?observationX ?propertyRefArea ?refAreaEndpoint . # Zeile hinzugefügt
+
+            ?observationX ?propertyRefPeriod year:", refPeriod, " . # Zeile hinzugefügt
+
+
             ?propertyMeasureX rdfs:subPropertyOf* sdmx-measure:obsValue .
             ?observationX ?propertyMeasureX ?x .
 
-            BIND(xsd:int(SUBSTR(STR(?refPeriodXURI), 38, 4)) AS ?refPeriodX)
+            ?refAreaEndpoint skos:notation* ?refArea. # Zeile hinzugefügt 
+
+            # TODO: filter anpassen, je nach Anzahl vorhandener refAreas
+            FILTER (?refArea  = '", s$s[1], "' || ?refArea  = '", s$s[2], "' || ?refArea  = '", s$s[3], "') # Zeile hinzugefügt
+        }
+    }
+
+    SERVICE <",endpointY,"> {
+        SELECT DISTINCT ?refArea ?y # ?refPeriodX in ?refArea geändert
+        WHERE {
+            ?observationY qb:dataSet <", datasetY, "> .
+
+            ?propertyRefArea rdfs:subPropertyOf* sdmx-dimension:refArea .
+ 
+            ?observationY ?propertyRefArea ?refAreaEndpoint . # Zeile hinzugefügt
+
+            ?observationY ?propertyRefPeriod year:", refPeriod, " . # Zeile hinzugefügt
+
+            ?propertyMeasureY rdfs:subPropertyOf* sdmx-measure:obsValue .
+            ?observationY ?propertyMeasureY ?y .
+
+            ?refAreaEndpoint skos:notation* ?refArea. # Zeile hinzugefügt 
+
+            # TODO: filter anpassen, je nach Anzahl vorhandener refAreas
+            FILTER (?refArea  = '", s$s[1], "' || ?refArea  = '", s$s[2], "' || ?refArea  = '", s$s[3], "') # Zeile hinzugefügt
+
         }
     }
 }
-ORDER BY ?refPeriodX ?x
+#ORDER BY ?refPeriodX ?x
 ")
 
         q <- paste(prefixes, query)
