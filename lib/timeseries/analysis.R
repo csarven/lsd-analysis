@@ -1,11 +1,14 @@
-getAnalysisTimeSeries <- function(datasetX, refArea, data) {
-    id <- digest(paste0(datasetX, refArea), algo="sha1", serialize=FALSE)
+getAnalysisTimeSeries <- function(datasetX, refAreas, data) {
+    id <- digest(paste0(datasetX, refAreas), algo="sha1", serialize=FALSE)
 
     write.csv(data, file=paste0("www/csv/", id, ".csv"))
 
-    meta <- data.frame("n"= nrow(data$x))
+    meta <- data.frame("n"= nrow(data), "min"=min(data$x), "max"=max(data$x))
 
-    return(list("datasetX"=datasetX, "refArea"=refArea, "data"=data, "meta"=meta, "id"=id))
+#cat(paste0("meta$n: ", meta$n), file=stderr())
+#cat(paste0("nrow: ", nrow(data)), file=stderr())
+
+    return(list("datasetX"=datasetX, "refArea"=refAreas, "data"=data, "meta"=meta, "id"=id))
 }
 
 
@@ -20,9 +23,9 @@ outputPlotTimeSeries <- function(analysis) {
                 data <- analysis$data
                 x <- data$x
                 datasetXLabel <- resourceLabels[analysis$datasetX]
-                refArea <- resourceLabels[analysis$refArea]
+                refAreas <- analysis$refAreas
 
-                g <- ggplot(data, environment = environment(), aes(x=data$refPeriod, y=data$x)) + geom_line(aes=(size=2)) + labs(list(x="Reference Period", y="Value", title=paste0(datasetXLabel, " for ", refArea)))
+                g <- ggplot(data, environment = environment(), aes(x=data$refPeriod, y=data$x, group=data$refArea, colour=data$refArea)) + geom_line(aes=(size=2)) + labs(list(x="Reference Period", y="Value", title=paste0(datasetXLabel, " for ", refAreas)))
 
 
                 g <- g + annotate("text", x=Inf, y=Inf, label="270a.info", hjust=1.3, vjust=2, color="#0000E4", size=4)

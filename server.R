@@ -63,10 +63,10 @@ shinyServer(function(input, output, session) {
             case4={
                 s <- strsplit(c(s = paths[3]), ":")
                 datasetX <- paste0(namespaces[s$s[1]], s$s[2])
-                s <- strsplit(c(s = paths[4]), ":")
-                refArea <- paste0(namespaces[s$s[1]], s$s[2])
+
+                refAreas <- paths[4]
 #cat(paste0("paths: ", paths, " s: ", s, " refArea:", refArea ,"--"), file=stderr())
-                analysisParams = paste0(datasetX, refArea)
+                analysisParams = paste0(datasetX, refAreas)
 
                 analysisSummary <- sQGASTimeSeries(analysisURI)
             },
@@ -105,7 +105,7 @@ shinyServer(function(input, output, session) {
                 case4={
                     meta <- data.frame("n"=analysisSummary$n, "graph"=analysisSummary$graph)
 
-                    analysis <- list("datasetX"=datasetX, "refArea"=refArea, "data"=data, "meta"=meta, "id"=id)
+                    analysis <- list("datasetX"=datasetX, "refArea"=refAreas, "data"=data, "meta"=meta, "id"=id)
                 },
                 {}
             )
@@ -125,13 +125,13 @@ shinyServer(function(input, output, session) {
                 },
                 #Time Series
                 case4={
-                    data <- sQTimeSeries(datasetX, refArea)
+                    data <- sQTimeSeries(datasetX, refAreas)
                 },
                 {}
             )
 
 #cat(paste0("data: ", data), file=stderr())
-#cat(paste0("data: ", data, " length(data[,1]): ", length(data[,1]), " data[2, 'refPeriodX']: ", data[2, 'refPeriodX']), file=stderr())
+cat(paste0("data: ", data, " length(data): ", length(data)), file=stderr())
 
 
             if (length(data) > 0) {
@@ -147,9 +147,13 @@ shinyServer(function(input, output, session) {
                     #Time Series
                     case4={
                         #Build analysis
-                        analysis <- getAnalysisTimeSeries(datasetX, refArea, data)
+                        analysis <- getAnalysisTimeSeries(datasetX, refAreas, data)
+
+cat(paste0("meta: ", analysis$meta), file=stderr())
+
+
                         #Update store
-                        storeUpdated <- sUTimeSeries(analysisURI, datasetX, refArea, data, analysis)
+                        storeUpdated <- sUTimeSeries(analysisURI, datasetX, refAreas, data, analysis)
                     },
                     {}
                 )
@@ -192,7 +196,7 @@ shinyServer(function(input, output, session) {
 
         if(length(paths) != 2) {
             analysis <- getData()
-cat(paste0(analysis), file=stderr())
+#cat(paste0(analysis), file=stderr())
             switch(paste0("case", length(paths)),
                 #Regression Analysis
                 case5={

@@ -1,3 +1,5 @@
 config.R
 www/plots/*
 www/csv/*
+.project
+notes.txt
