@@ -11,6 +11,7 @@ urlPathname <- ''
 
 source("config.R", local=TRUE)
 source("resourceLabels.R", local=TRUE)
+source("common.R", local=TRUE)
 source("lib/sparql.R", local=TRUE)
 source("lib/regression/sparql.R", local=TRUE)
 source("lib/regression/analysis.R", local=TRUE)
@@ -130,8 +131,7 @@ shinyServer(function(input, output, session) {
                 {}
             )
 
-#cat(paste0("data: ", data), file=stderr())
-cat(paste0("data: ", data, " length(data): ", length(data)), file=stderr())
+#cat(paste0("data: ", data, " length(data): ", length(data)), file=stderr())
 
 
             if (length(data) > 0) {
@@ -149,7 +149,7 @@ cat(paste0("data: ", data, " length(data): ", length(data)), file=stderr())
                         #Build analysis
                         analysis <- getAnalysisTimeSeries(datasetX, refAreas, data)
 
-cat(paste0("meta: ", analysis$meta), file=stderr())
+#cat(paste0("meta: ", analysis$meta), file=stderr())
 
 
                         #Update store
