@@ -49,6 +49,7 @@ WHERE {
     {
         SERVICE <http://dbpedia.org/sparql> {
             SELECT *
+            WHERE {
                 ?event a <http://dbpedia.org/ontology/MilitaryConflict> .
                 ?event dbpedia:place ?dbpediaRefArea .
                 ?event rdfs:label ?label .
@@ -62,4 +63,4 @@ WHERE {
 
     r <- SPARQL(sparqlServiceQueryURI, q)
     return(r$results)
-})
+}
