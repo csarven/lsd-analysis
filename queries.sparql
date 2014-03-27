@@ -1,0 +1,7 @@
+# DBPedia: military conflicts
+
+PREFIX dbo: <http://dbpedia.org/ontology/>
+
+SELECT ?war WHERE {
+     ?war a dbo:MilitaryConflict
+}
