@@ -1,177 +1,248 @@
-"uri","title","start","end"
-"http://dbpedia.org/resource/Bombardment_of_Algiers_(1816)","Allied Bombardment of Algiers",1816,1816
-"http://dbpedia.org/resource/Ottoman–Saudi_War","Ottoman-Wahhabi",1816,1818
-"http://dbpedia.org/resource/Chilean_War_of_Independence","Liberation of Chile",1817,1818
-"http://dbpedia.org/resource/Military_career_of_Simón_Bolívar","First Bolivar Expedition",1817,1819
-"http://dbpedia.org/resource/Mexican_War_of_Independence","Mexican Independence",1817,1818
-"http://dbpedia.org/resource/Kandyan_Wars","British-Kandyan",1817,1818
-"http://dbpedia.org/resource/First_Anglo-Maratha_War","British-Maratha",1817,1818
-"http://dbpedia.org/resource/History_of_Sudan_(1821–85)","Ottoman Conquest of Sudan",1820,1821
-"http://dbpedia.org/resource/Military_career_of_Simón_Bolívar","Second Bolivar Expedition",1821,1822
-"http://dbpedia.org/resource/Ottoman–Persian_War_(1821–1823)","Turco-Persian",1821,1822
-"http://dbpedia.org/resource/Anglo-Burmese_wars","First British-Burmese",1823,1826
-"http://dbpedia.org/resource/Anglo-Ashanti_wars","First British-Ashanti",1824,1826
-"http://dbpedia.org/resource/Peruvian_War_of_Independence","Liberation of Peru",1824,1825
-"http://dbpedia.org/resource/Java_War","Dutch - Javanese",1825,1830
-"N/A","British-Bharatpuran",1825,1826
-"http://dbpedia.org/resource/Cisplatine_War","Brazil-Argentine",1826,1828
-"http://dbpedia.org/resource/Russo-Persian_War_(1826–28)","Russo-Persian",1826,1828
-"http://dbpedia.org/resource/Spanish_attempts_to_reconquer_Mexico","Spanish Reconquest of Mexico",1829,1829
-"http://dbpedia.org/resource/Invasion_of_Algiers_in_1830","French Occupation of Algiers",1830,1830
-"N/A","Ottoman-Bilmez-Asiri War",1832,1837
-"http://dbpedia.org/resource/Anglo-Zulu_War","First British-Zulu",1838,1838
-"http://dbpedia.org/resource/First_Anglo-Afghan_War","First British-Afghan",1839,1842
-"http://dbpedia.org/resource/First_Opium_War","First Opium",1839,1842
-"324","First Franco-Algerian",1839,1847
-"325","Peru-Bolivian",1841,1841
-"326","British-Sind",1843,1843
-"327","Uruguay War",1843,1851
-"327","Uruguay War",1845,1849
-"329","Gwalior",1843,1843
-"330","Franco-Moroccan",1844,1844
-"331","First British-Sikh",1845,1846
-"332","Cracow Revolt",1846,1846
-"333","First British-Xhosa",1846,1847
-"334","First Dutch-Bali",1848,1848
-"335","Second British-Sikh",1848,1849
-"336","Chinese Pirates",1849,1849
-"337","Second British-Xhosa",1850,1852
-"338","Ottoman-Yam",1851,1851
-"339","Second British-Burmese",1852,1852
-"340","French-Tukulor War",1854,1857
-"341","British-Santal",1855,1856
-"342","Hodeida Seige",1856,1856
-"343","Second Opium",1856,1860
-"345","French Conquest of Kabylia",1856,1857
-"347","Indian Mutiny",1857,1859
-"349","First Franco-Vietnamese",1858,1862
-"350","Netherlands-Bone",1859,1860
-"351","Argentine-Buenos Aires",1859,1859
-"352","Garibaldi Expedition",1860,1860
-"353","Spanish-Santo Dominican",1863,1865
-"355","British-Maori",1863,1866
-"356","Shimonoseki War",1863,1864
-"356","Shimonoseki War",1864,1864
-"357","British Umbeyla Campaign",1863,1863
-"359","Russian-Kokand",1864,1865
-"360","British-Bhutanese",1865,1865
-"361","Russian-Bukharan",1866,1866
-"362","British-Ethiopian",1867,1868
-"363","First Spanish-Cuban",1868,1878
-"364","Attack on Bahr el-Ghazal",1869,1870
-"365","Ottoman Conquest of Arabia",1870,1872
-"366","Second Franco-Algerian",1871,1872
-"367","Second British-Ashanti",1873,1874
-"369","Second Franco-Vietnamese",1873,1874
-"370","First Dutch-Achinese",1873,1878
-"371","Kokand Rebellion",1875,1876
-"372","Egyptian-Ethiopian",1875,1876
-"373","Serbian-Turkish",1876,1877
-"374","Third British-Xhosa",1877,1878
-"375","Egypt-Sudanese Slavers",1878,1879
-"376","Russo-Turkoman",1878,1881
-"377","Austrian-Bosnian",1878,1878
-"379","Second British-Afghan",1878,1879
-"380","Second British-Zulu",1879,1879
-"381","Gun War",1880,1881
-"382","First Boer War",1880,1881
-"383","Franco-Tunisian",1881,1882
-"384","First British-Mahdi",1881,1882
-"384","First British-Mahdi",1881,1885
-"385","Third Franco-Vietnamese",1882,1884
-"385","Third Franco-Vietnamese",1883,1884
-"386","First Franco-Madagascan",1883,1885
-"387","Third British-Burmese",1885,1889
-"389","French-Mandinka",1885,1886
-"390","Russo-Afghan",1885,1885
-"391","Serbian-Bulgarian",1885,1885
-"392","First Italian-Ethiopian",1887,1887
-"393","Zambezi Conquest",1888,1888
-"394","First Franco-Dahomeyan",1890,1890
-"395","Franco-Jolof",1890,1891
-"396","Second Franco-Dahomeyan",1892,1893
-"397","Belgian-Tib",1892,1894
-"398","Third British-Ashanti",1893,1894
-"399","Melilla War",1893,1894
-"400","Mahdist-Italian",1893,1894
-"401","Second Franco-Madagascan",1894,1895
-"402","Second Dutch-Bali",1894,1894
-"403","Portuguese-Gaza Empire",1895,1895
-"404","Second Spanish-Cuban",1895,1898
-"405","Japan-Taiwanese",1895,1895
-"406","Mazrui Rebellion",1895,1896
-"407","Second Italian-Ethiopian",1895,1896
-"409","Second British-Mahdi",1896,1899
-"410","Spanish-Philippine",1896,1898
-"411","British-South Nigerian",1897,1897
-"412","British-Pathan",1897,1898
-"413","Hut Tax",1898,1898
-"414","American-Philippine",1899,1902
-"415","French Conquest of Chad",1899,1900
-"416","Second Boer War",1899,1902
-"417","Last Ashanti War",1900,1900
-"419","Somali Rebellion",1901,1904
-"420","Bailundu Revolt",1902,1903
-"421","Kuanhama Rebellion",1902,1904
-"422","British Conquest of Kano & Sokoto",1903,1903
-"423","South West African Revolt",1904,1906
-"424","Second Dutch-Achinese",1904,1907
-"425","Younghusband Expedition",1904,1904
-"426","Maji-Maji Revolt",1905,1906
-"427","Sokoto Uprising",1906,1906
-"429","Third British-Zulu",1906,1906
-"430","Dembos War",1907,1910
-"431","Anti-Foreign Revolt",1907,1910
-"432","Japan-Korean Guerrillas",1907,1910
-"433","French Conquest of Wadai",1909,1911
-"434","French-Berber",1912,1912
-"435","First Sino-Tibetan",1912,1913
-"436","Moroccan Berber",1913,1915
-"436","Moroccan Berber",1913,1914
-"437","Moro Rebellion",1913,1913
-"440","Second Sino-Tibetan",1918,1918
-"441","Caco Revolt",1918,1920
-"442","Third British-Afghan",1919,1919
-"443","First British-Waziristan",1919,1920
-"444","Franco-Syrian",1920,1920
-"445","Iraqi-British",1920,1920
-"446","Conquest of Mongolia",1921,1921
-"446","Conquest of Mongolia",1920,1921
-"447","Italian-Sanusi",1923,1931
-"449","Rif Rebellion",1925,1926
-"449","Rif Rebellion",1921,1926
-"450","Moplah Rebellion",1921,1922
-"451","Franco-Druze",1925,1927
-"452","Yen Bai Uprising",1930,1931
-"453","Saya San's Rebellion",1930,1932
-"454","British-Palestinian",1936,1936
-"455","Second British-Waziristan",1936,1938
-"456","Indonesian",1945,1946
-"457","French-Indochina",1946,1954
-"459","Third Franco-Madagascan",1947,1948
-"460","Malayan Rebellion",1948,1957
-"461","Indo-Hyderabad",1948,1948
-"462","Third Sino-Tibetan",1950,1950
-"463","Franco-Tunisian",1952,1954
-"464","British-Mau Mau",1952,1956
-"465","Moroccan Independence",1953,1956
-"466","Third Franco-Algerian",1954,1962
-"467","French-Cameroon",1957,1958
-"469","Angolan-Portuguese",1961,1974
-"471","Mozambique-Portuguese",1964,1975
-"472","East Timorese, Phase 2",1975,1976
-"473","Namibian",1975,1988
-"474","Western Saharan",1975,1983
-"474","Western Saharan",1976,1976
-"474","Western Saharan",1975,1979
-"475","Khmer Insurgency",1979,1989
-"476","Soviet Quagmire",1980,1989
-"477","First PKK in Iraq",1991,1992
-"479","Second PKK in Iraq",1997,1997
-"480","Al Aqsa Intifada",2000,2003
-"481","Afghan Resistance",2001,-7
-"482","Iraqi Resistance",2003,-7
-"482","Iraqi Resistance",2004,2005
-"482","Iraqi Resistance",2004,2004
-"482","Iraqi Resistance",2004,2006
-"482","Iraqi Resistance",2004,-7
+"title","dtstart","dtend","fatalities"
+"Syrian civil war",2011,2012,18821
+"Libyan Civil War",2011,2012,2080
+"Yemen vs Al-Quaeda",2009,2012,3811
+"Kivu Conflict",2006,2012,4272
+"Mexican Drug War",2006,2012,83000
+"Southern Lebanon War",2006,2006,1003
+"Waziristan conflict",2004,2012,22016
+"Iraqi Insurgency",2003,2012,23461
+"Iraq vs US led coalition",2003,2003,8202
+"Al Quaeda vs USA and allies",2001,2012,4538
+"Afghanistan war",2001,2012,43917
+"Civil War in Côte d Ivoire",2000,2005,1471
+"Eritrea vs Ethiopia",1998,2000,98192
+"Guinea Bissau Coup",1998,1999,1700
+"Yugoslavia vs NATO Forces and UCK Guerilla",1997,1999,4992
+"Congo Brazzaville Civil War",1997,1999,15540
+"Nepal Civil War",1996,2006,12284
+"First and Second Congo Wars",1996,2006,208367
+"Russia vs Chechnyan Secessionists",1994,2007,20381
+"North Yemen vs Secessionists",1994,1994,1491
+"Tajikistan Govt vs Opposition",1992,1998,6834
+"Bosnian Govt vs Serbian Insurgents",1992,1995,24504
+"Iran vs rebel groups (MEK,PJAK etc)",1991,2011,3200
+"Burundi Civil War",1991,2005,13671
+"Sierra Leone Govt vs Rebels",1991,2002,12034
+"Georgian Civil War",1991,1993,2439
+"Croatia vs Serbian Irregulars, Rep. Krajina",1991,1992,1749
+"Somalia Civil War",1990,2012,37236
+"Rwanda Civil War (Hutus vs Tutsis)",1990,2012,527145
+"Algeria Govt vs Islamic rebels, GIA, AIS, AQIM",1990,2005,18348
+"First Gulf War",1990,1991,22848
+"India vs Pakistan, Kashmir Dispute",1989,2012,24253
+"Liberia Civil War",1989,2003,22247
+"Indonesia Gvt vs Aceh Liberation movement",1989,2003,5280
+"Nagorno-Karabakh War",1988,1994,4623
+"South Yemen Coup",1986,1986,10000
+"Indian Govt vs Punjab",1985,2000,7247
+"Turkey Gov vs Kurdistan Guerilla (PPK)",1984,2012,33990
+"Sudan Government vs Militias",1983,2012,68769
+"Sri Lankan Govt vs Tamil Militants (LTTE)",1983,2009,62313
+"Senegal Civil War",1982,2011,1781
+"Iraq Government vs SCIRI",1982,2000,1306
+"Falklands War",1982,1982,964
+"Nicaragua Govt vs Contras",1981,1990,30000
+"Uganda Civil War",1980,2007,116044
+"Peruvian Gvt vs Sendero Luminoso and MRTA",1980,1999,19466
+"Iran vs Iraq",1980,1988,644500
+"Iran vs Muhajedin e-Khalq",1979,2001,4395
+"Cambodian Govt vs Khmer Rouge",1979,1998,84950
+"El Salvador Gvt vs FMLN Guerrillas",1979,1992,55000
+"Mozambique Govt vs Guerilla",1979,1992,115600
+"Sino-Vietnamese War",1979,1988,48223
+"Syrian Govt vs Muslim Brotherhood",1979,1982,2075
+"Afghanistan Civil War",1978,2001,121536
+"Rebels vs Ethiopian Government",1978,1991,52398
+"Vietnam vs Cambodia (Kampuchea)",1978,1979,32500
+"Nicaraguan Gvt vs Sandinistas",1978,1979,10000
+"Uganda vs Tanzania",1978,1979,4000
+"Iranian Revolution",1978,1979,1100
+"Ethiopia vs Oromia rebels (OLF)",1977,2012,3070
+"Chittagong Hill Tracts Conflict",1977,1997,1152
+"Ethiopia vs Somalia",1977,1978,4000
+"East Timorese Guerilla vs Indonesian Govt",1976,1999,75150
+"Ethiopia vs Somali (Ogadeni) Rebels",1976,1983,3839
+"Angolan Gvt vs UNITA Guerilla",1975,2000,157400
+"Iraq vs Kurdistan (KDP/PUK)",1975,1996,5928
+"Western Sahara War",1975,1991,13000
+"Lebanese Civil War",1975,1990,144000
+"Argentina: Civil War and Dirty War",1975,1983,20000
+"Ethiopia vs Eritrea",1974,1991,98927
+"Turko Cypriot War",1974,1974,5000
+"Balochistan Insurgency",1973,1977,8600
+"Chilean MIlitary Coup",1973,1973,2095
+"Yom Kippur War",1973,1973,6450
+"Hutu Rebellion",1972,1972,153000
+"Philippines Govt vs Mindanao Guerilla",1971,2008,13639
+"Sri Lanka Govt vs JVP",1971,1990,1902
+"Bangladesh War",1971,1971,50000
+"Philippine Government vs CPP Guerrilla",1969,2008,25000
+"Northern Ireland, The Troubles",1969,1994,3149
+"Israel vs Egypt",1969,1970,5520
+"Football War Honduras vs El Salvador",1969,1969,2107
+"Rhodesian Government vs ZANU,ZAPU,PF",1967,1979,27080
+"Chinese Cultural Revolution",1967,1976,2050000
+"Cambodian Civil War",1967,1975,246204
+"Nigerian Civil War",1967,1970,75000
+"The Six Day War",1967,1967,10047
+"Chad Civil War",1966,2010,37233
+"Namibia vs South Africa",1966,1988,10000
+"Guatemalan Civil War",1965,1995,88575
+"Indonesian annexation of West Papua",1965,1978,2100
+"Vietnam War",1965,1975,2048050
+"Dominican Republic Coup",1965,1965,4027
+"Second Kashmir War",1965,1965,5000
+"Colombia Govt vs Guerillas Farc and ELN",1964,2012,47303
+"Mozambique War of Independence",1964,1975,13500
+"Sudan Government vs Insurgents",1963,1972,10000
+"First Rwanda Civil War",1963,1964,1000
+"Guinea Bissau War of Independence",1962,1974,15000
+"North Yemen Civil War",1962,1970,10000
+"Algerian Civil War",1962,1963,1500
+"Sino-Indian War",1962,1962,2105
+"Angolan War of Independence",1961,1975,79000
+"Laos Civil War",1960,1973,21500
+"First Kurdish–Iraqi War",1960,1970,6600
+"Congo Crisis",1960,1965,7150
+"1959 Mosul uprising in Iraq",1959,1959,2000
+"First Lebanese War",1958,1958,1400
+"Second Taiwan Strait Crisis",1958,1958,1500
+"PRRI and Permesta revolts in Indonesia",1957,1961,27200
+"Tibetan Uprising",1956,1959,12000
+"Cuban Revolution",1956,1959,1000
+"Sinai War",1956,1956,2142
+"Soviet Invasion of Hungary",1956,1956,3171
+"Vietnam Civil War",1955,1964,164923
+"Cameroon War of Independence",1955,1960,11700
+"Algerian War of Independece",1954,1962,182526
+"First Taiwan Strait Crisis",1954,1955,2370
+"Moroccan War of Independence",1953,1956,3000
+"Indonesian Govt vs Darul islam",1953,1953,2700
+"Kenya, Mau-Mau vs UK",1952,1956,17100
+"Tunisian war of Independence",1952,1954,3000
+"Bolivian Revolution",1952,1952,1000
+"Korean War",1950,1953,995000
+"Third Sino-Tibetan War",1950,1950,4000
+"Israel vs Palestine",1948,2012,16697
+"Burmese Government vs Separatist Guerillas",1948,2012,49243
+"Burmese Govt vs Communist Guerillas",1948,1988,17700
+"La Violencia",1948,1958,29800
+"Malayan Civil War",1948,1957,9100
+"Arab-Israeli War",1948,1949,8000
+"Cheju Rebellion in South Korea",1948,1949,17000
+"Yemeni Imamate War",1948,1948,5000
+"Costa Rican Civil War",1948,1948,2000
+"First Kashmir War",1947,1949,3200
+"Madagascar Rebellion",1947,1948,12200
+"Indian Partition Communal Violence",1947,1948,200000
+"Civil War in Mandatory Palestine",1947,1948,4009
+"Telangana Rebellion and Indo-Hyderabad War",1947,1948,5210
+"Paraguayan Gvt vs Rebels",1947,1947,1000
+"Taiwanese revolt",1947,1947,1250
+"Philippines, Huk rebels vs Govt",1946,1954,11300
+"First Indochina War Comm. vs France",1945,1954,269500
+"Soviet Union vs Baltic Partisans (’’Forest Brethren’’)",1945,1951,32400
+"Chinese Civil War",1945,1950,1200000
+"Ukrainian Revolts",1945,1947,59700
+"Indonesian Independence",1945,1946,5400
+"Greece Civil War",1944,1949,68207
+"Franco-Thai War",1940,1941,1400
+"World War II",1939,1945,50000000
+"The Winter War in Finland",1939,1940,151798
+"The battle of Khalkhin Gol",1939,1939,28000
+"Changkufeng Incident",1938,1938,1726
+"Third Sino-Japanese War",1937,1941,1000000
+"Arab revolt in Mandatory Palestine",1936,1939,2576
+"Second British-Waziristan",1936,1939,10200
+"Spanish Civil War",1936,1939,466300
+"Italo-Ethiopian War",1935,1936,20000
+"Spanish Socialists vs Govt",1934,1934,1335
+"Saudi-Yemeni War",1934,1934,2100
+"Chaco War",1932,1935,92661
+"El Salvador, La Matanza",1932,1932,2600
+"Brazilian Revolt",1932,1932,1000
+"Aprista Revolt in Peru",1932,1932,1100
+"Xinjiang Muslim Revolt",1931,1934,21000
+"Manchurian War",1931,1933,60000
+"Communists vs Koumintang",1930,1935,500000
+"Saya San Rebellion",1930,1932,1140
+"The Yên Bái Uprising",1930,1931,1000
+"Ikhwan Revolt",1929,1930,5500
+"Kuomintang vs warlords",1929,1930,75000
+"Sino-Soviet war",1929,1929,3200
+"Escobar Rebellion",1929,1929,2000
+"Second Afghan Anti-Reform War",1928,1929,15000
+"The Cristero War",1926,1929,10000
+"Northern Expedition",1926,1928,126500
+"Druze revolt",1925,1927,6000
+"Afghan rebels vs govt",1924,1925,2000
+"Honduras Coup",1924,1924,1000
+"Soviet-Turkestan War",1921,1923,3500
+"Moplah Riots in Kerala",1921,1922,2450
+"Ireland freestaters vs Irregulars",1921,1922,4000
+"Kronstadt Rebellion",1921,1921,2600
+"Senussi Orden vs Italy",1920,1932,40000
+"Third Rif War",1920,1926,70000
+"Blackshirts vs Leftists",1920,1922,3300
+"Green Rebellion",1920,1921,6700
+"Conquest of Mongolia",1920,1921,4000
+"Iraq vs UK",1920,1921,9540
+"Lithuanian-Polish War",1920,1920,1000
+"Franco-Syrian war",1920,1920,3500
+"Nejd-Hejaz Wars",1919,1925,4000
+"Second Greco Turkish War",1919,1922,50000
+"Turkish War of Independence",1919,1921,40000
+"Polish-Soviet War",1919,1920,100000
+"First British-Waziristan War",1919,1920,2000
+"Hungary Civil War",1919,1920,1500
+"Sparticist Rising",1919,1919,2170
+"Hungarian–Romanian War of 1919",1919,1919,11000
+"Third Anglo-Afghan War",1919,1919,2136
+"Latvian Liberation",1918,1920,13246
+"Caco Revolt",1918,1920,2102
+"Estonian Liberation War",1918,1920,11750
+"Second Sino-Tibetan",1918,1918,1500
+"Finnish Civil War",1918,1918,15150
+"Russian Revolution and Civil War",1917,1922,802225
+"Russia-Turkestan",1916,1917,1350
+"World War I",1914,1918,10670868
+"Bandits vs Chinas Govt",1914,1914,5000
+"2nd Balkan War",1913,1913,60500
+"Kuomintang vs Chinese Army",1913,1913,5000
+"Moro Rebellion",1913,1913,15050
+"1st Balkan War",1912,1913,82000
+"Paraguay Coups",1911,1912,5000
+"Italo-Turkish War",1911,1912,20000
+"First Sino-Tibetan War",1911,1912,2000
+"Cuba vs Partido Independiente de Color",1911,1911,1050
+"Chinese Revolution",1911,1911,1000
+"Mexican Revolution",1910,1920,125000
+"Asir-Yemen Revolt",1910,1911,9000
+"French Conquest of Wadai Sultanate",1909,1911,12000
+"The second Rif War",1909,1910,10000
+"Iranian Constitution War",1908,1909,1100
+"Portugese war against Dembos",1907,1910,5100
+"Ma al-’Aynayn’s Anti-Colonial Insurgency",1907,1910,3150
+"Korean guerilla war against Japanese occupation",1907,1910,17736
+"Morocco unrest",1907,1908,1400
+"Romanian Peasant Revolt",1907,1907,2000
+"4th Central American war",1907,1907,1000
+"Zulu Rebellion",1906,1906,2356
+"Third Central American war",1906,1906,1000
+"Sokoto and UK vs Mahdist Revolt",1906,1906,2080
+"Russian Revolution 1905",1905,1906,1500
+"Maji Maji revolt",1905,1906,8840
+"Dutch-Achinese War",1904,1907,24200
+"Russo-Japanese war",1904,1905,151831
+"Southwest African Revolt",1904,1905,12800
+"Second Yemen Rebellion",1904,1904,30000
+"Uruguay Civil War",1904,1904,1000
+"Ilinden Uprising",1903,1903,6330
+"Uprisings in Colonial Angola",1902,1904,2000
+"The Boxer Rebellion",1900,1900,3003
+"Sino-Russian War",1900,1900,4000
+"The Dervish State vs Ethiopia, Britain and Italy",1899,1920,6000
+"The War of a Thousand Days",1899,1903,100000
+"Philippine insurrection",1899,1902,20500
+"Second Boer war",1899,1902,30800
