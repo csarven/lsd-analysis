@@ -29,10 +29,11 @@ outputPlotTimeSeries <- function(analysis) {
 
                 g <- ggplot(data, environment = environment(), aes(x=data$refPeriod, y=data$x, group=data$refAreaLabel)) + geom_line(aes(linetype=data$refAreaLabel)) + labs(list(x="Reference Period", y="Value", title=paste0(datasetXLabel, "\n for ", refAreasString), linetype="Reference\nareas"))
 
-                enrichment <- sparqlQueryGetWars(analysis$refArea)
+#                enrichment <- sparqlQueryGetWars(analysis$refArea)
+                enrichment <- list("conflicts"=read.csv(paste0("data/conflicts.csv"), header=T))
                 if (length(enrichment) > 0) {
-                    event <- enrichment$wars
-                    g <- g + annotate("rect", xmin=event$dtstart, xmax=event$dtend, ymin=-Inf, ymax=+Inf, alpha=0.1) + annotate("text", x=event$dtstart, y=Inf, vjust=2, hjust=0, label=event$label, size=4)
+                    event <- enrichment$conflicts
+                    g <- g + annotate("rect", xmin=event$dtstart, xmax=event$dtend, ymin=-Inf, ymax=+Inf, alpha=0.1) + annotate("text", x=event$dtstart, y=Inf, vjust=2, hjust=0, label=event$title, size=4)
                 }
 
                 g <- g + theme_bw() + annotate("text", x=Inf, y=Inf, label="270a.info", hjust=1.3, vjust=2, color="#0000E4", size=4)
