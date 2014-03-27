@@ -2,6 +2,7 @@
 
 PREFIX dbo: <http://dbpedia.org/ontology/>
 
-SELECT ?war WHERE {
-     ?war a dbo:MilitaryConflict
-}
+SELECT ?war ?date WHERE {
+     ?war a dbo:MilitaryConflict .
+     ?war dbo:date ?date .
+} ORDER BY ?date ?war
