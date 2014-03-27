@@ -32,7 +32,7 @@ outputPlotTimeSeries <- function(analysis) {
 #                enrichment <- sparqlQueryGetWars(analysis$refArea)
                 enrichment <- list("conflicts"=read.csv(paste0("data/conflicts.csv"), header=T))
                 if (length(enrichment) > 0) {
-                    event <- enrichment$conflicts
+                    event <- enrichment$conflicts[enrichment$conflicts$fatalities > 200000 & enrichment$conflicts$dtstart > 1959, ]
                     g <- g + annotate("rect", xmin=event$dtstart, xmax=event$dtend, ymin=-Inf, ymax=+Inf, alpha=0.1) + annotate("text", x=event$dtstart, y=0, vjust=1, hjust=0, label=event$title, angle=90, size=4)
                 }
 
