@@ -35,6 +35,8 @@ sparqlQueryGetWars <- function(refAreas) {
         refAreasFILTER <- buildString("FILTER (", "?refArea = '", refAreas, ",", "'", ")", " || ", FALSE)
 
     q <- paste0("
+PREFIX dbo: <http://dbpedia.org/ontology/>
+
 SELECT ?event
 WHERE {
     {
@@ -48,10 +50,11 @@ WHERE {
     UNION
     {
         SERVICE <http://dbpedia.org/sparql> {
-            SELECT *
+            SELECT ?war ?date
             WHERE {
-                ?event a <http://dbpedia.org/ontology/MilitaryConflict> .
+                ?event a dbo:MilitaryConflict .
                 ?event dbpedia:place ?dbpediaRefArea .
+            #    ?event dbo:date ?date .
                 ?event rdfs:label ?label .
 
                 FILTER (LANG(?label) = 'en')
