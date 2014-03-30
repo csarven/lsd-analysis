@@ -51,7 +51,7 @@ sparqlUpdateTimeSeries <- function(analysisURI, datasetX, refAreas, data, analys
 
     sparqlQueryURI <- paste0("<", sparqlEndpoints$stats, "?query=", sparqlQueryStringEncoded, ">")
 
-    refAreasLabels <- buildString("", "'", refAreas, ",", "'", "", " and ")
+    refAreasLabels <- buildString("", "'", refAreas, ",", "'", "", " and ", FALSE)
 
     query <- paste0("
 INSERT DATA {
@@ -129,24 +129,6 @@ WHERE {
 }
 
 
-buildString <- function(prefix, itemPrefix, values, valuesSeparator, itemSuffix, suffix, separator) {
-    string = prefix
-    s <- strsplit(c(s = values), valuesSeparator)
-    for (i in 1:length(s$s)) {
-        item = paste0(itemPrefix, s$s[i], itemSuffix)
-
-        if (i == 1) {
-            string <- paste(string, item, sep="")
-        }
-        else {
-            string <- paste(string, item, sep=separator)            
-        }
-    }
-    string <- paste(string, suffix, sep="")
-
-    return(string)
-}
-
 
 sparqlQueryTimeSeries <- function(datasetX, refAreas) {
     q <- sparqlQueryStringTimeSeries(datasetX, refAreas)
@@ -167,15 +149,13 @@ sparqlQueryStringTimeSeries <- function(datasetX, refAreas) {
         endpointX <- sparqlEndpoints[datasetNameX]
 #print(endpointX)
 
-        refAreasFILTER <- buildString("FILTER (", "?refArea = '", refAreas, ",", "'", ")", " || ")
+        refAreasFILTER <- buildString("FILTER (", "?refArea = '", refAreas, ",", "'", ")", " || ", FALSE)
 
-
-
-    query <- paste0("
-SELECT DISTINCT ?refPeriod ?refArea ?x
+        query <- paste0("
+SELECT ?refArea ?refPeriod ?x
 WHERE {
     SERVICE <",endpointX,"> {
-        SELECT DISTINCT ?refPeriod ?refArea ?x
+        SELECT DISTINCT ?refArea ?refPeriod ?x
         WHERE {
             ?observationX qb:dataSet <", datasetX, "> .
             ?propertyRefArea rdfs:subPropertyOf* sdmx-dimension:refArea .
@@ -192,8 +172,8 @@ WHERE {
         }
     }
 }
-ORDER BY ?refPeriod ?refArea ?x
-")
+ORDER BY ?refArea ?refPeriod
+        ")
 
         q <- paste(prefixes, query)
 #        print(q)

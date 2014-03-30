@@ -23,10 +23,11 @@ outputPlotTimeSeries <- function(analysis) {
                 data <- analysis$data
                 x <- data$x
                 datasetXLabel <- resourceLabels[analysis$datasetX]
-                refAreas <- analysis$refAreas
+                refAreasString <- buildString("", "", analysis$refArea, ",", "", "", " and ", TRUE)
+                #XXX: Is there a cleaner way to do this for lists or should I change the whole data to a data.frame?
+                data$refAreaLabel <- sapply(data$refArea, function(row) resourceLabels[[row]], USE.NAMES=FALSE)
 
-                g <- ggplot(data, environment = environment(), aes(x=data$refPeriod, y=data$x, group=data$refArea, colour=data$refArea)) + geom_line(aes=(size=2)) + labs(list(x="Reference Period", y="Value", title=paste0(datasetXLabel, " for ", refAreas)))
-
+                g <- ggplot(data, environment = environment(), aes(x=data$refPeriod, y=data$x, group=data$refAreaLabel)) + geom_line(aes(linetype=data$refAreaLabel)) + labs(list(x="Reference Period", y="Value", title=paste0(datasetXLabel, "\n for ", refAreasString), linetype="Reference\nareas"))
 
                 g <- g + annotate("text", x=Inf, y=Inf, label="270a.info", hjust=1.3, vjust=2, color="#0000E4", size=4)
 
@@ -58,7 +59,9 @@ outputAnalysisSummaryTimeSeries <- function(analysis) {
                 <caption>Analysis results</caption>
                 <tbody>
                     <tr><th>Time Series</th><td><a href=\"", analysis$datasetX, "\">", resourceLabels[analysis$datasetX] ,"</a></td></tr>
-                    <tr><th>N (sample size)</th><td>", nrow(analysis$data), "</td></tr>
+                    <tr><th>N (sample size)</th><td>", analysis$meta$n, "</td></tr>
+                    <tr><th>Min</th><td>", analysis$meta$min, "</td></tr>
+                    <tr><th>Max</th><td>", analysis$meta$max, "</td></tr>
                 </tbody>
             <table>
 
