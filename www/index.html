@@ -11,10 +11,33 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
         <link rel="stylesheet" type="text/css" href="/theme/default/css/display.css?version=0.0.2" media="all"/>
+  <link rel="stylesheet" type="text/css" href="shared/shiny.css"/>
 
-        <script src="/shiny/jquery.js" type="text/javascript"></script>
-        <script src="/shiny/shiny.js" type="text/javascript"></script>
+        <script src="/shared/jquery.js" type="text/javascript"></script>
+        <script src="/shared/shiny.js" type="text/javascript"></script>
         <script src="/shiny/index.js" type="text/javascript"></script>
+
+<!--<script src="/shared/highlight/highlight.pack.js"></script>-->
+<!--<script src="/shared/showdown/compressed/showdown.js"></script>-->
+<!--<script src="/shared/jqueryui/1.10.3/jquery-ui.min.js"></script>-->
+<!--<script src="/shared/shiny-showcase.js"></script>-->
+<!--<link rel="stylesheet" type="text/css" href="/shared/highlight/rstudio.css"/>-->
+<!--<link rel="stylesheet" type="text/css" href="/shared/shiny-showcase.css"/>-->
+<!--<link rel="stylesheet" type="text/css" href="/shared/font-awesome/css/font-awesome.min.css"/>-->
+<!--<script src="/shared/highlight/highlight.pack.js"></script>-->
+<!--<script src="/shared/showdown/compressed/showdown.js"></script>-->
+<!--<script src="/shared/jqueryui/1.10.3/jquery-ui.min.js"></script>-->
+<!--<script src="/shared/shiny-showcase.js"></script>-->
+<!--<link rel="stylesheet" type="text/css" href="/shared/highlight/rstudio.css"/>-->
+<!--<link rel="stylesheet" type="text/css" href="/shared/shiny-showcase.css"/>-->
+<!--<link rel="stylesheet" type="text/css" href="/shared/font-awesome/css/font-awesome.min.css"/>-->
+<!--  <link rel="stylesheet" type="text/css" href="/shared/bootstrap/css/bootstrap.min.css"/>-->
+  <script src="/shared/bootstrap/js/bootstrap.min.js"></script>
+<!--  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>-->
+<!--  <link rel="stylesheet" type="text/css" href="/shared/bootstrap/css/bootstrap-responsive.min.css"/>-->
+<!--  <link rel="stylesheet" type="text/css" href="/shared/slider/css/jquery.slider.min.css"/>-->
+<!--  <script src="/shared/slider/js/jquery.slider.min.js"></script>-->
+
     </head>
 
     <body id="site_home">
@@ -56,12 +79,17 @@
 
 <!--<div class="container-fluid">-->
 <!--  <div class="row-fluid">-->
-<!--    <div class="span12" style="padding: 10px 0px;">-->
-<!--      <h1>Linked Statistical Data Analysis</h1>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--  <div class="row-fluid">-->
 <!--    <div class="span4">-->
+        <div class="tabbable tabs-above">
+            <ul class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" href="#regression">Regression</a></li>
+<!--                <li><a data-toggle="tab" href="#timeseries">Time series</a></li>-->
+            </ul>
+
+            <div class="tab-content">
+                <div id="regression" class="tab-pane active">
+
+
       <form id="form_analysis" class="well">
         <label class="control-label" for="datasetX">Independent variable</label>
         <select id="datasetX">
@@ -16680,6 +16708,23 @@
       <div id="plot" class="shiny-html-output" style="width:60%;"></div>
 
       <div id="statsSummary" class="shiny-html-output"></div>
+
+
+
+                    </div> <!-- end of #regression-->
+
+<!--                    <div id="timeseries" class="tab-pane">Hello World!</div>-->
+
+
+                </div> <!-- end of tab-content-->
+            </div> <!-- end of tabbable-->
+
+
+<!--        </div> <!-- end of span4-->
+<!--    </div> <!-- end of row-fluid-->
+<!--</div> <!-- end of container-fluid-->
+
+
 
 </div>
 </div>
