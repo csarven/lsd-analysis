@@ -244,7 +244,7 @@ WHERE {
     }
     FILTER (?refAreaYExactMatch = ?refAreaX || ?refAreaXExactMatch = ?refAreaY || ?refAreaY = ?refAreaX)
 }
-ORDER BY ?identityY ?identityX ?x ?y
+#ORDER BY ?identityY ?identityX ?x ?y
 ")
 
 
