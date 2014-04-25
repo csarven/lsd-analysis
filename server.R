@@ -158,9 +158,10 @@ shinyServer(function(input, output, session) {
                     {}
                 )
             }
-#            else {
-#                analysis <- list("warning" = paste0("<p class=\"warning\">Insufficient observations to analyze <em><a href=\"", datasetX, "\">", resourceLabels[datasetX], "</a></em> and <em><a href=\"", datasetY, "\">", resourceLabels[datasetY], "</a> for reference period <a href=\"", refPeriod, "\">", resourceLabels[refPeriod], "</a></em>. Please try a different combination.</p>"))
-#            }
+            else {
+                analysis <- list("warning" = paste0("<p class=\"warning\">Insufficient observations to analyze. Please try a different combination.</p>"))
+#<em><a href=\"", datasetX, "\">", resourceLabels[datasetX], "</a></em> and <em><a href=\"", datasetY, "\">", resourceLabels[datasetY], "</a> for reference period <a href=\"", refPeriod, "\">", resourceLabels[refPeriod], "</a></em>
+            }
         }
 
         return(analysis)
