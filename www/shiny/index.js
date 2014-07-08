@@ -1,5 +1,8 @@
 $(document).ready(function(){
-    var href = window.location.href.match(new RegExp(window.location.protocol + "\/\/" + window.location.hostname + "\/analysis\/([^\/]*)\/([^\/]*)\/([^\.]*).html"));
+    var port = '';
+    if (window.location.port.length > 0) { port = ":" + window.location.port }
+
+    var href = window.location.href.match(new RegExp(window.location.protocol + "\/\/" + window.location.hostname + port + "\/analysis\/([^\/]*)\/([^\/]*)\/([^\.]*).html"));
 
     if(href != null) {
         switch(href.length) {
@@ -46,9 +49,6 @@ $(document).ready(function(){
         var datasetX = $('#datasetX').val().match(/http:\/\/([^.]*).270a.info\/dataset\/(.*)/);
         var datasetY = $('#datasetY').val().match(/http:\/\/([^.]*).270a.info\/dataset\/(.*)/);
         var refPeriod = $('#refPeriod').val().match(/http:\/\/reference.data.gov.uk\/id\/([^\/]*)\/(.*)/);
-
-        port = '';
-        if (window.location.port.length > 0) { port = ":" + window.location.port }
 
         window.location.href = window.location.protocol + "//" + window.location.hostname + port + "/analysis/" +
             datasetX[1] + ":" + datasetX[2] + "/" +
