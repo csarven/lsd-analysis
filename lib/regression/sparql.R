@@ -194,10 +194,10 @@ sparqlQueryStringRegression <- function(datasetX, datasetY, refPeriod) {
 #print(endpointY)
 
     query <- paste0("
-SELECT DISTINCT ?refAreaY ?x ?y ?identityX ?identityY
+SELECT ?refAreaY ?x ?y ?identityX ?identityY
 WHERE { 
     SERVICE <",endpointX,"> {
-        SELECT DISTINCT ?identityX ?refAreaX ?refAreaXExactMatch ?x
+        SELECT ?identityX ?refAreaX ?refAreaXExactMatch ?x
         WHERE {
             ?observationX qb:dataSet <", datasetX, "> .
             ?observationX ?propertyRefPeriodX <", refPeriod, "> .
@@ -211,7 +211,7 @@ WHERE {
 
             OPTIONAL {
                 ?refAreaX skos:exactMatch ?refAreaXExactMatch .
-                FILTER (REGEX(STR(?refAreaXExactMatch), \"^http://", domainY, "/\"))
+                FILTER (STRSTARTS(STR(?refAreaXExactMatch), \"http://", domainY, "/\"))
             }
 
             ?refAreaX skos:notation ?refAreaCodeX .
@@ -220,7 +220,7 @@ WHERE {
         }
     }
     SERVICE <",endpointY,"> {
-        SELECT DISTINCT ?identityY ?refAreaY ?refAreaYExactMatch ?y
+        SELECT ?identityY ?refAreaY ?refAreaYExactMatch ?y
         WHERE {
             ?observationY qb:dataSet <", datasetY, "> .
             ?observationY ?propertyRefPeriodY <", refPeriod, "> .
@@ -234,7 +234,7 @@ WHERE {
 
             OPTIONAL {
                 ?refAreaY skos:exactMatch ?refAreaYExactMatch .
-                FILTER (REGEX(STR(?refAreaYExactMatch), \"^http://", domainX, "/\"))
+                FILTER (STRSTARTS(STR(?refAreaYExactMatch), \"http://", domainX, "/\"))
             }
 
             ?refAreaY skos:notation ?refAreaCodeY .
@@ -242,7 +242,7 @@ WHERE {
 #            FILTER (DATATYPE(?y) = xsd:decimal || DATATYPE(?y) = xsd:double)
         }
     }
-    FILTER (?refAreaYExactMatch = ?refAreaX || ?refAreaXExactMatch = ?refAreaY || ?refAreaY = ?refAreaX)
+    FILTER (SAMETERM(?refAreaYExactMatch, ?refAreaX) || SAMETERM(?refAreaXExactMatch, ?refAreaY) || SAMETERM(?refAreaY, ?refAreaX))
 }
 #ORDER BY ?identityY ?identityX ?x ?y
 ")
